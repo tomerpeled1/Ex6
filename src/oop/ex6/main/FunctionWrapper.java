@@ -5,8 +5,8 @@ public class FunctionWrapper {
 	private String name;
 	private VariableWrapper.Types[] params;
 
-	FunctionWrapper(String){
-		7
+	FunctionWrapper(String line){
+		//todo implement
 	}
 
 }

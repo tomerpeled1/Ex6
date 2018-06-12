@@ -9,4 +9,6 @@ public class MasterBlock extends CodeBlock {
 
 	private MasterBlock() {
 	}
+
+	//TODO
 }

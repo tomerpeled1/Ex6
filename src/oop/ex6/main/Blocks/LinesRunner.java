@@ -18,6 +18,9 @@ public class LinesRunner {
      * @return A String with the line.
      */
     public String GetNextLine() {
+        if (currentPlace >= lines.length) {
+            return null;
+        }
         return lines[currentPlace++];
     }
 

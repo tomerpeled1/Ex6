@@ -4,5 +4,6 @@ public class SubBlock extends CodeBlock {
 
     public SubBlock(CodeBlock parent) {
         super(parent);
+    }
 
 }

@@ -28,21 +28,35 @@ public abstract class CodeBlock {
         this.parent = parent;
     }
 
+    public static Pattern BLOCK_END_CHECK = Pattern.compile("[ ]*}[ ]*");
     public void run() throws IllegalLineException {
-        while (
         String line = runner.GetNextLine();
-        CodeBlock nextBlock = null;
-        //TODO check if variable declaration (aka int x = 3), check that it's not in this scope variables(can be in others)
+        Matcher BLOCK_END_MATCHER = Regex.BLOCK_END_CHECK.matcher(line);
+        while (!BLOCK_END_MATCHER.matches()) {
+            CodeBlock nextBlock = null;
+            //TODO check if variable declaration (aka int x = 3), check that it's not in this scope variables(can be in others)
 
-        //TODO check if variable assigment (aka x = 3)
+            //TODO check if variable assigment (aka x = 3)
 
-        //TODO check a call to a fucntion, check if function is in the fnctions list and check paramenters
+            //TODO check a call to a fucntion, check if function is in the fnctions list and check paramenters
 
-        //TODO check if if/while and a boolean expression.
-        Matcher ifMatcher = Regex.IF_CHECK.matcher(line);
-        Matcher whileMatcher = Regex.WHILE_CHECK.matcher(line);
-        String booleanExpression = null;
-        if (ifMatcher.matches()) {
-            booleanExpression =
+            //TODO check if if/while and a boolean expression.
+            Matcher ifMatcher = Regex.IF_CHECK.matcher(line);
+            Matcher whileMatcher = Regex.WHILE_CHECK.matcher(line);
+            String booleanExpression = null;
+            int expressionStart = 0;
+            int expressionEnd = 0;
+            if (ifMatcher.matches() || whileMatcher.matches()) {
+                expressionStart = line.indexOf('(');
+                expressionEnd = line.indexOf(')');
+                booleanExpression = line.substring(expressionStart, expressionEnd);
+                //TODO check if valid boolean expression
+                nextBlock = new BooleanExpressionBlock();
+            }
+            if (nextBlock != null) {
+                nextBlock.run();
+            }
+        }
+
 
 }

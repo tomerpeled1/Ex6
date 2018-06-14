@@ -1,4 +1,4 @@
-package oop.ex6;
+package oop.ex6.main;
 
 public class VariableWrapper {
 	enum Types {

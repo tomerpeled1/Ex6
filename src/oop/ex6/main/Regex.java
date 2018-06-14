@@ -4,11 +4,13 @@ import java.util.regex.Pattern;
 
 public class Regex {
 
-	private static String type = "[(int)(double)(String)(boolean)(char)]";
+	private static String type = "(int|double|String|boolean|char)";
 
-	private static String methodName = "[a-zA-Z]";
+	private static String methodName = "[a-zA-Z][a-zA-z0-9_]*";
 
-	static final Pattern FUNCTION_TEMPLATE = Pattern.compile("void" +methodName+ "\\(");
+	private static String varNAme = "[a-zA-Z_][a-zA-z0-9_]*";
 
-	void[ ]+[a-zA-z]\w*\([ ]*((double|String|boolean|char)[ ]+[a-zA-z]\w*[ ]*)+\){
-}
+	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("void[ ]+" + methodName + "[ ]*\\([ ]*([ ]*"
+			+ type + "[ ]+" + varNAme + "[ ]*,)*[ ]*" + type + "[ ]+" + varNAme + "[ ]*\\)\\{");
+
+	}

@@ -5,11 +5,16 @@ import oop.ex6.VariableWrapper;
 import oop.ex6.main.IllegalLineException;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public abstract class CodeBlock {
     protected ArrayList<VariableWrapper> variables;
     private CodeBlock parent;
     protected static LinesRunner runner;
+
+    private static Pattern ifCheck = Pattern.compile("if \\(.+\\)[ ]*\\{");
+    private static Pattern whileCheck = Pattern.compile("while \\(.+\\)[ ]*\\{");
+
 
     protected CodeBlock() {
     }

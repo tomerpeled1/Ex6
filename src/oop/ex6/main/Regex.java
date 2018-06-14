@@ -13,4 +13,7 @@ public class Regex {
 	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("void[ ]+" + methodName + "[ ]*\\([ ]*([ ]*"
 			+ type + "[ ]+" + varNAme + "[ ]*,)*[ ]*" + type + "[ ]+" + varNAme + "[ ]*\\)\\{");
 
-	}
+
+	public static final Pattern IF_CHECK = Pattern.compile("if \\(.+\\)[ ]*\\{");
+	public static final Pattern WHILE_CHECK = Pattern.compile("while \\(.+\\)[ ]*\\{");
+}

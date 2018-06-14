@@ -12,8 +12,7 @@ public abstract class CodeBlock {
     private CodeBlock parent;
     protected static LinesRunner runner;
 
-    private static Pattern ifCheck = Pattern.compile("if \\(.+\\)[ ]*\\{");
-    private static Pattern whileCheck = Pattern.compile("while \\(.+\\)[ ]*\\{");
+
 
 
     protected CodeBlock() {

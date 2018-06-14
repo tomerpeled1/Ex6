@@ -54,5 +54,19 @@ public class VariableWrapper {
 		}
 	}
 
+	/**
+	 * Gets the name of the variable.
+	 * @return A String containing the name of the variable.
+	 */
+	public String getName() {
+		return this.name;
+	}
 
+	/**
+	 * Gets the type of the variable.
+	 * @return The type of the variable.
+	 */
+	public Types getType() {
+		return this.type;
+	}
 }

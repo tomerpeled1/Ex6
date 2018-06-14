@@ -9,7 +9,7 @@ public class VariableWrapper {
 	private Boolean hasValue;
 	private Types type;
 
-	VariableWrapper (String line){
+	VariableWrapper (String line, Types type) {
 		//TODO - implement
 	}
 

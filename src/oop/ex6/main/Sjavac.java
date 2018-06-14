@@ -1,7 +1,7 @@
 package oop.ex6.main;
 
-import oop.ex6.FunctionWrapper;
-import oop.ex6.VariableWrapper;
+import oop.ex6.main.FunctionWrapper;
+import oop.ex6.main.VariableWrapper;
 import oop.ex6.main.Blocks.MasterBlock;
 
 import java.util.ArrayList;

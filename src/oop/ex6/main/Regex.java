@@ -14,8 +14,8 @@ public class Regex {
 			+ type + "[ ]+" + varName + "[ ]*,)*[ ]*" + type + "[ ]+" + varName + "[ ]*\\)\\{");
 
 
-	public static final Pattern IF_CHECK = Pattern.compile("[ ]*if[ ]*\\(.+\\)[ ]*\\{");
-	public static final Pattern WHILE_CHECK = Pattern.compile("[ ]*while[ ]*\\(.+\\)[ ]*\\{");
+	public static final Pattern IF_PATTERN = Pattern.compile("[ ]*if[ ]*\\(.+\\)[ ]*\\{");
+	public static final Pattern WHILE_PATTERN = Pattern.compile("[ ]*while[ ]*\\(.+\\)[ ]*\\{");
 
 	public static final Pattern typePattern = Pattern.compile(type);
 	public static final Pattern varNamePattern = Pattern.compile(varName);
@@ -23,5 +23,8 @@ public class Regex {
 	public static final Pattern lineStartPattern = Pattern.compile("[ ]*void");
 
 	public static final Pattern funcNamePattern = Pattern.compile(methodName);
+
+
+	public static final Pattern BLOCK_END_PATTERN = Pattern.compile("[ ]*}[ ]*");
 
 }

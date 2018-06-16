@@ -1,7 +1,7 @@
 package oop.ex6.main.Blocks;
 
 import com.sun.org.apache.bcel.internal.classfile.Code;
-import oop.ex6.VariableWrapper;
+import oop.ex6.main.VariableWrapper;
 import oop.ex6.main.IllegalLineException;
 import oop.ex6.main.Regex;
 
@@ -28,10 +28,9 @@ public abstract class CodeBlock {
         this.parent = parent;
     }
 
-    public static Pattern BLOCK_END_CHECK = Pattern.compile("[ ]*}[ ]*");
     public void run() throws IllegalLineException {
         String line = runner.GetNextLine();
-        Matcher BLOCK_END_MATCHER = Regex.BLOCK_END_CHECK.matcher(line);
+        Matcher BLOCK_END_MATCHER = Regex.BLOCK_END_PATTERN.matcher(line);
         while (!BLOCK_END_MATCHER.matches()) {
             CodeBlock nextBlock = null;
             //TODO check if variable declaration (aka int x = 3), check that it's not in this scope variables(can be in others)
@@ -41,8 +40,8 @@ public abstract class CodeBlock {
             //TODO check a call to a fucntion, check if function is in the fnctions list and check paramenters
 
             //TODO check if if/while and a boolean expression.
-            Matcher ifMatcher = Regex.IF_CHECK.matcher(line);
-            Matcher whileMatcher = Regex.WHILE_CHECK.matcher(line);
+            Matcher ifMatcher = Regex.IF_PATTERN.matcher(line);
+            Matcher whileMatcher = Regex.WHILE_PATTERN.matcher(line);
             String booleanExpression = null;
             int expressionStart = 0;
             int expressionEnd = 0;
@@ -51,12 +50,12 @@ public abstract class CodeBlock {
                 expressionEnd = line.indexOf(')');
                 booleanExpression = line.substring(expressionStart, expressionEnd);
                 //TODO check if valid boolean expression
-                nextBlock = new BooleanExpressionBlock();
+                nextBlock = new BooleanExpressionBlock(this);
             }
             if (nextBlock != null) {
                 nextBlock.run();
             }
         }
-
+    }
 
 }

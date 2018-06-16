@@ -70,7 +70,7 @@ public class Sjavac {
 			String[] curValAndType = typesAndVals[i].split("[ ]+");
 			String curParamName = curValAndType[1];
 			int start= typesMatcher.start(),end = typesMatcher.end();
-			params.add(new VariableWrapper(line.substring(start,end),true,curParamName);
+			params.add(new VariableWrapper(line.substring(start,end),true,curParamName));
 		}
 		Matcher name = Regex.funcNamePattern.matcher(line);
 		name.find();

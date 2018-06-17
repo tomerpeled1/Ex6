@@ -37,25 +37,9 @@ public abstract class CodeBlock {
 
             //TODO check a call to a fucntion, check if function is in the fnctions list and check paramenters
 
-            //TODO check if if/while and a boolean expression.
-            Matcher ifMatcher = Regex.IF_PATTERN.matcher(line);
-            Matcher whileMatcher = Regex.WHILE_PATTERN.matcher(line);
-            String booleanExpression = null;
-            int expressionStart = 0;
-            int expressionEnd = 0;
-            if (ifMatcher.matches() || whileMatcher.matches()) {
-                expressionStart = line.indexOf('(');
-                expressionEnd = line.indexOf(')');
-                booleanExpression = line.substring(expressionStart, expressionEnd);
-                String[] splittedExpression = booleanExpression.split(Regex.BOOLEAN_EXPRESSION_SPLIT);
-                for (String exp : splittedExpression) {
-                    Matcher doubleMatch = Regex.DOU
-                    if (exp.equals("true") || exp.equals("false")) ||
-                    //TODO check if initiliazed boolean, double or int.
-                    //TODO check if a a double or int constant value.
-                    //TODO if not throw exception.
-                    nextBlock = new BooleanExpressionBlock(this);
-                }
+            //TODO check if a declaration of functoin only in master block and than run on it.
+            if (checkIfValidBooleanExpression(line)) {
+                nextBlock = new BooleanExpressionBlock(this);
             }
             if (nextBlock != null) {
                 nextBlock.run();
@@ -63,4 +47,74 @@ public abstract class CodeBlock {
         }
     }
 
+    /**
+     * Checks if a line opens a new if or while block.
+     * @param line The line to check if a opens a block.
+     * @return True if a valid boolean expression, otherwise false.
+     */
+    private boolean checkIfValidBooleanExpression(String line) throws IllegalLineException {
+        Matcher ifMatcher = Regex.IF_PATTERN.matcher(line);
+        Matcher whileMatcher = Regex.WHILE_PATTERN.matcher(line);
+        String booleanExpression = null;
+        int expressionStart = 0;
+        int expressionEnd = 0;
+        if (ifMatcher.matches() || whileMatcher.matches()) {
+            expressionStart = line.indexOf('(');
+            expressionEnd = line.indexOf(')');
+            booleanExpression = line.substring(expressionStart, expressionEnd);
+            String[] splitExpression = booleanExpression.split(Regex.BOOLEAN_EXPRESSION_SPLIT);
+            for (String exp : splitExpression) {
+                Matcher doubleMatch = Regex.DOUBLE_PATTERN.matcher(exp);
+                if (!(exp.equals("true") || exp.equals("false") || doubleMatch.matches() ||
+                        checkIfInitializedVariable(exp))) {
+                    throw new IllegalLineException("error in line " + runner.GetLineNumber() + ", boolean " +
+                            "expression not supported.");
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if a variable is in the list, if it is return the varible object if not returns null.
+     * @param name The name of the variable to check if is in the list.
+     * @return The variable object if it's in the list, otherwise null.
+     */
+    private VariableWrapper getVariableFromList(String name) {
+        for (VariableWrapper var : variables) {
+            if (var.getName().equals(name)) {
+                return var;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks if a variable is an initialized variable.
+     * !! can't check if uninitialized variable.
+     * @param name The name of the variable to check.
+     * @return True if it's initialized, false else.
+     */
+    protected boolean checkIfInitializedVariable(String name) {
+        VariableWrapper var = getVariableFromList(name);
+        if (var == null) {//not even in the list.
+            return false;
+        }
+        return var.getHasValue();
+    }
+
+    /**
+     * Checks if a variable is an uninitialized variable.
+     * !! can't check if initialized variable.
+     * @param name The name of the variable to check.
+     * @return True if it's uninitialized, false else.
+     */
+    protected boolean checkIfUninitializedVariable(String name) {
+        VariableWrapper var = getVariableFromList(name);
+        if (var == null) {//not even in the list.
+            return false;
+        }
+        return !var.getHasValue();
+    }
 }

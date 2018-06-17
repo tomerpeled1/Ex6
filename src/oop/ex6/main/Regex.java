@@ -20,7 +20,8 @@ public class Regex {
 	public static final Pattern typePattern = Pattern.compile(type);
 	public static final Pattern varNamePattern = Pattern.compile(varName);
 	public static final Pattern bracketsPattern = Pattern.compile("\\(.*\\)");
-	public static final Pattern lineStartPattern = Pattern.compile("[ ]*void");
+	public static final Pattern funcLineStartPattern = Pattern.compile("[ ]*void");
+	public static final Pattern varLineStartPattern = Pattern.compile("[ ]*" + type);
 
 	public static final Pattern funcNamePattern = Pattern.compile(methodName);
 

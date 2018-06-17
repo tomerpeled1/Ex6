@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class Regex {
 
-	private static final Pattern DOUBLE_PATTERN = Pattern.compile("\\d");
+	public static final Pattern DOUBLE_PATTERN = Pattern.compile("\\d");
 
 	private static final String type = "(int|double|String|boolean|char)";
 

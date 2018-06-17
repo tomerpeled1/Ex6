@@ -49,6 +49,7 @@ public abstract class CodeBlock {
                 booleanExpression = line.substring(expressionStart, expressionEnd);
                 String[] splittedExpression = booleanExpression.split(Regex.BOOLEAN_EXPRESSION_SPLIT);
                 for (String exp : splittedExpression) {
+                    Matcher doubleMatch = Regex.DOU
                     if (exp.equals("true") || exp.equals("false")) ||
                     //TODO check if initiliazed boolean, double or int.
                     //TODO check if a a double or int constant value.

@@ -12,8 +12,14 @@ public class Regex {
 
 	private static final String varName = "[a-zA-Z_][a-zA-z0-9_]*";
 
-	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("void\\s+" + methodName + "\\s*\\(\\s*(\\s*"
-			+ type + "\\s+" + varName + "\\s*,)*\\s*" + type + "\\s+" + varName + "\\s*\\)\\{\\s*");
+
+	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("\\s*void\\s+" + methodName + "\\s*\\(\\s*" +
+			"(\\s*" + type + "\\s+" + varName + "\\s*,\\s*)*" +
+			"(\\s*" + type + "\\s+" + varName + "\\s*)*\\)\\s*\\{\\s*");
+
+
+	public static final Pattern VARIABLE_TEMPLATE = Pattern.compile("\\s*" + type + "\\s+" +
+			varName + "\\s*;");
 
 
 	public static final Pattern IF_PATTERN = Pattern.compile("\\s*if\\s*\\(.+\\)\\s*\\{");
@@ -31,5 +37,6 @@ public class Regex {
 	public static final Pattern BLOCK_END_PATTERN = Pattern.compile("\\s*}\\s*");
 
 	public static final String BOOLEAN_EXPRESSION_SPLIT = "\\s*(\\|\\||&&)\\s*";
+
 
 }

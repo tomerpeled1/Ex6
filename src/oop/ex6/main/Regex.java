@@ -4,6 +4,8 @@ import java.util.regex.Pattern;
 
 public class Regex {
 
+	private static final Pattern DOUBLE_PATTERN = Pattern.compile("\\d");
+
 	private static final String type = "(int|double|String|boolean|char)";
 
 	private static final String methodName = "[a-zA-Z][a-zA-z0-9_]*";

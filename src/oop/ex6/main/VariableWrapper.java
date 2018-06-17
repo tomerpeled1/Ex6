@@ -69,4 +69,9 @@ public class VariableWrapper {
 	public Types getType() {
 		return this.type;
 	}
+
+	@Override
+	public String toString() {
+		return "type = " + type + ", name = " + name;
+	}
 }

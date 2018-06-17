@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class Regex {
 
-	public static final Pattern DOUBLE_PATTERN = Pattern.compile("\\d");
+	public static final Pattern DOUBLE_PATTERN = Pattern.compile("(([\\d]+\\.[\\d]*)|([\\d]*\\.[\\d]+))");
 
 	private static final String type = "(int|double|String|boolean|char)";
 
@@ -29,14 +29,17 @@ public class Regex {
 	public static final Pattern varNamePattern = Pattern.compile(varName);
 	public static final Pattern bracketsPattern = Pattern.compile("\\(.*\\)");
 	public static final Pattern funcLineStartPattern = Pattern.compile("\\s*void");
-	public static final Pattern varLineStartPattern = Pattern.compile("[\\s]*" + type + "[\\s]*.*[\\s]*;[\\s]*");
+	public static final Pattern varLinePattern = Pattern.compile("[\\s]*" + type + "[\\s]*.*[\\s]*;[\\s]*");
+	public static final Pattern finalVarLinePattern = Pattern.compile("[\\s]*" + "final" + "[\\s]*" + type +
+																	   "[\\s]*.*[\\s]*;[\\s]*");
 
 	public static final Pattern funcNamePattern = Pattern.compile(methodName);
 
+	public static final String VARIABLE_DECLARATION_SPLIT = "(\\s*" + type + "\\s*|(\\s*(,|;)\\s*))";
 
 	public static final Pattern BLOCK_END_PATTERN = Pattern.compile("\\s*}\\s*");
 
-	public static final String BOOLEAN_EXPRESSION_SPLIT = "\\s*(\\|\\||&&)\\s*";
+	public static final String BOOLEAN_EXPRESSION_SPLIT = "\\s*(\\|\\||&&)*\\s*";
 
 
 }

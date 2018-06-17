@@ -8,6 +8,7 @@ public class VariableWrapper {
 	private String name;
 	private boolean hasValue;
 	private Types type;
+	private boolean isFinal;
 
 	/**
 	 * Constructs a VariableWrapper object with a type, hasValue and name.
@@ -68,6 +69,14 @@ public class VariableWrapper {
 	 */
 	public Types getType() {
 		return this.type;
+	}
+
+	/**
+	 * Checks if the variable is a final variable.
+	 * @return True if it is, false otherwise.
+	 */
+	public boolean isFinal() {
+		return this.isFinal;
 	}
 
 	@Override

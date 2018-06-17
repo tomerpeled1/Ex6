@@ -31,6 +31,7 @@ public abstract class CodeBlock {
         Matcher BLOCK_END_MATCHER = Regex.BLOCK_END_PATTERN.matcher(line);
         while (!BLOCK_END_MATCHER.matches()) {
             CodeBlock nextBlock = null;
+
             //TODO check if variable declaration (aka int x = 3), check that it's not in this scope variables(can be in others)
 
             //TODO check if variable assigment (aka x = 3)
@@ -46,6 +47,10 @@ public abstract class CodeBlock {
             }
         }
     }
+
+    protected boolean InitliazeVariables(String line) {
+
+
 
     /**
      * Checks if a line opens a new if or while block.

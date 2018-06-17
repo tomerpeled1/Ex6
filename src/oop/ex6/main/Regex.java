@@ -29,7 +29,7 @@ public class Regex {
 	public static final Pattern varNamePattern = Pattern.compile(varName);
 	public static final Pattern bracketsPattern = Pattern.compile("\\(.*\\)");
 	public static final Pattern funcLineStartPattern = Pattern.compile("\\s*void");
-	public static final Pattern varLineStartPattern = Pattern.compile("\\s*" + type);
+	public static final Pattern varLineStartPattern = Pattern.compile("[\\s]*" + type + "[\\s]*.*[\\s]*;[\\s]*");
 
 	public static final Pattern funcNamePattern = Pattern.compile(methodName);
 

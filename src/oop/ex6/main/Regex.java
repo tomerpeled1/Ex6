@@ -4,11 +4,11 @@ import java.util.regex.Pattern;
 
 public class Regex {
 
-	private static String type = "(int|double|String|boolean|char)";
+	private static final String type = "(int|double|String|boolean|char)";
 
-	private static String methodName = "[a-zA-Z][a-zA-z0-9_]*";
+	private static final String methodName = "[a-zA-Z][a-zA-z0-9_]*";
 
-	private static String varName = "[a-zA-Z_][a-zA-z0-9_]*";
+	private static final String varName = "[a-zA-Z_][a-zA-z0-9_]*";
 
 	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("void[ ]+" + methodName + "[ ]*\\([ ]*([ ]*"
 			+ type + "[ ]+" + varName + "[ ]*,)*[ ]*" + type + "[ ]+" + varName + "[ ]*\\)\\{");
@@ -26,5 +26,7 @@ public class Regex {
 
 
 	public static final Pattern BLOCK_END_PATTERN = Pattern.compile("[ ]*}[ ]*");
+
+	public static final String BOOLEAN_EXPRESSION_SPLIT = "[ ]*(\\|\\||&&)[ ]*";
 
 }

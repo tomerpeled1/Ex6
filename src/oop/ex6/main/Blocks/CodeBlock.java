@@ -49,6 +49,7 @@ public abstract class CodeBlock {
                 expressionStart = line.indexOf('(');
                 expressionEnd = line.indexOf(')');
                 booleanExpression = line.substring(expressionStart, expressionEnd);
+
                 //TODO check if valid boolean expression
                 nextBlock = new BooleanExpressionBlock(this);
             }

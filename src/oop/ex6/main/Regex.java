@@ -40,9 +40,10 @@ public class Regex {
 	public static final Pattern varNamePattern = Pattern.compile(varName);
 	public static final Pattern bracketsPattern = Pattern.compile("\\(.*\\)");
 	public static final Pattern funcLineStartPattern = Pattern.compile("\\s*void");
-	public static final Pattern varLinePattern = Pattern.compile("[\\s]*" + type + "[\\s]*.*[\\s]*;[\\s]*");
-	public static final Pattern finalVarLinePattern = Pattern.compile("[\\s]*" + "final" + "[\\s]*" + type +
-																	   "[\\s]*.*[\\s]*;[\\s]*");
+	private static final String varLineCheck = "[\\s]*" + type + "[\\s]*.*[\\s]*;[\\s]*";
+	public static final Pattern varLinePattern = Pattern.compile(varLineCheck);
+	//TODO when checking a final var line pattern you need to check initialization too because it must be initiliazed.
+	public static final Pattern finalVarLinePattern = Pattern.compile("[\\s]*" + "final" + varLineCheck);
 
 	public static final Pattern funcNamePattern = Pattern.compile(methodName);
 

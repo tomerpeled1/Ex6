@@ -4,7 +4,8 @@ import java.util.regex.Pattern;
 
 public class Regex {
 
-	public static final Pattern DOUBLE_PATTERN = Pattern.compile("(([\\d]+[\\.]*[\\d]*)|([\\d]*[\\.]*[\\d]+))");
+	public static final String DOUBLE_CHECK = "(([\\d]+[.]*[\\d]*)|([\\d]*[.]*[\\d]+))";
+	public static final Pattern DOUBLE_PATTERN = Pattern.compile(DOUBLE_CHECK);
 
 	private static final String type = "(int|double|String|boolean|char)";
 
@@ -13,8 +14,10 @@ public class Regex {
 	private static final String varName = "[a-zA-Z_][a-zA-z0-9_]*";
 
 	public static final Pattern intAssignment = Pattern.compile(varName + "[\\s]*=[\\s]*[\\d]+");
-
-
+	public static final Pattern doubleAssignnment = Pattern.compile(varName + "[\\s]*=[\\s]*" + DOUBLE_CHECK);
+	//TODO check for char should check '' and only one charcter
+	//TODO check for boolean should check only for true or false.
+	//TODO check for String should check for ""
 
 	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("\\s*void\\s+" + methodName + "\\s*\\(\\s*" +
 			"(\\s*" + type + "\\s+" + varName + "\\s*,\\s*)*" +

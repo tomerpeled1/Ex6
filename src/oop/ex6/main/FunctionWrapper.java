@@ -5,6 +5,11 @@ import java.util.ArrayList;
 public class FunctionWrapper {
 
 	private String name;
+
+	public String getName() {
+		return name;
+	}
+
 	private ArrayList<oop.ex6.main.VariableWrapper> params;
 
 	public FunctionWrapper(ArrayList<oop.ex6.main.VariableWrapper> params, String name){

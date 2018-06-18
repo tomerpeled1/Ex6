@@ -2,31 +2,46 @@ package oop.ex6.main;
 
 import oop.ex6.main.Blocks.MasterBlock;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class Sjavac {
 
+	private final static String IO_ERROR = "IO Error - problem with the file";
 
 	/*
 	returns an array of all lines in file, as Strings
 	 */
-	private static String[] getLines(String path) {
-		return null;
+	private static String[] getLines(String path) throws IOException {
+		String[] lines;
+		Path path1 = Paths.get(path);
+		lines = (String[]) Files.readAllLines(path1).toArray();
+		return lines;
 	}
 
-	public static void main(String[] args) throws IllegalLineException {
+	public static void main(String[] args){
 
 		//TODO check args
-
-//		String[] lines = getLines(args[0]);
-		String[] lines = new String[]{"void tomer(int j,boolean true){"}; //todo delete
+		String[] lines = null;
+		try {
+			lines = getLines(args[0]);
+		} catch (IOException e) {
+			System.err.println(IO_ERROR);
+			return;
+		}
+//		lines = new String[]{"void tomer(int j,boolean kk){"}; //todo delete
 		MasterBlock master = MasterBlock.getInstance();
-		ArrayList<FunctionWrapper> funcs = new ArrayList<FunctionWrapper>();
-		ArrayList<VariableWrapper> globalVars = new ArrayList<VariableWrapper>();
-
-		getGlobalDataMembers(lines, funcs, globalVars);
-		System.out.println(funcs);
+		master.setLines(lines);
+		try {
+			master.getGlobalDataMembers();
+		} catch (IllegalLineException e) {
+			System.err.println(e.getMessage());
+			return;
+		}
 
 	}
 
@@ -56,7 +71,7 @@ public class Sjavac {
 	                                    ArrayList<VariableWrapper> vars, String line) throws IllegalLineException {
 
 		Matcher funcLineStart = Regex.funcLineStartPattern.matcher(line);
-		Matcher varLineStart = Regex.varLineStartPattern.matcher(line);
+		Matcher varLineStart = Regex.varLinePattern.matcher(line);
 		if (funcLineStart.lookingAt()) {
 			funcs.add(lineToFuncObj(line));
 		} else if (varLineStart.lookingAt()) {

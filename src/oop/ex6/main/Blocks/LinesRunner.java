@@ -31,4 +31,8 @@ public class LinesRunner {
     public int GetLineNumber() {
         return currentPlace;
     }
+
+    public void setLines(String[] lines) {
+        this.lines = lines;
+    }
 }

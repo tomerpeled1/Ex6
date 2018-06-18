@@ -13,11 +13,16 @@ public class Regex {
 
 	private static final String varName = "[a-zA-Z_][a-zA-z0-9_]*";
 
-	public static final Pattern intAssignment = Pattern.compile(varName + "[\\s]*=[\\s]*[\\d]+");
-	public static final Pattern doubleAssignnment = Pattern.compile(varName + "[\\s]*=[\\s]*" + DOUBLE_CHECK);
-	//TODO check for char should check '' and only one charcter
-	//TODO check for boolean should check only for true or false.
-	//TODO check for String should check for ""
+	private static final String equalSignCheck = "[\\s]*=[\\s]*";
+
+	//Assignments checks.
+	public static final Pattern intAssignment = Pattern.compile(varName + equalSignCheck + "[\\d]+");
+	public static final Pattern doubleAssignment = Pattern.compile(varName + equalSignCheck + DOUBLE_CHECK);
+	public static final Pattern charAssignment = Pattern.compile(varName + equalSignCheck + "'.'[\\s]*");
+	public static final Pattern booleanAssignment = Pattern.compile(varName + equalSignCheck +
+																	"(true|false)[\\s]*");
+	public static final Pattern stringAssignment = Pattern.compile(varName + equalSignCheck + "\".*\"[\\s]*");
+	//end of assignments checks.
 
 	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("\\s*void\\s+" + methodName + "\\s*\\(\\s*" +
 			"(\\s*" + type + "\\s+" + varName + "\\s*,\\s*)*" +

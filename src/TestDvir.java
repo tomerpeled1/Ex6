@@ -18,7 +18,7 @@ public class TestDvir {
 //            System.out.println(str);
 //        }
         String x = "    intint = 33";
-        String y = x.replaceFirst("[\\s]*(int)[\\s]+", "");
+        String y = x.replaceFirst("[\\s]*int[\\s]*", "");
         System.out.println(y);
         Matcher m = Pattern.compile("\\s*int\\s*").matcher(x);
         System.out.println(m.lookingAt());

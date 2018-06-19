@@ -83,13 +83,6 @@ public class MasterBlock extends CodeBlock {
 	}
 
 	/*
-	gets a line of a variable deceleration, and returns a variable object. //TODO maybe dvir already did this.
-	 */
-	private static ArrayList<VariableWrapper> lineToVarObj(String line) throws IllegalLineException {
-		return null;
-	}
-
-	/*
 	gets a line of a function deceleration, and returns a function wrapper object.
 	 */
 	private static FunctionWrapper lineToFuncObj(String line) throws IllegalLineException {
@@ -107,7 +100,8 @@ public class MasterBlock extends CodeBlock {
 		String[] typesAndVals = brackets.split(",");
 		int i = 0;
 		while (typesMatcher.find()) {
-			i = initParams(line, typesMatcher, params, typesAndVals[i], i);
+			initParams(line, typesMatcher, params, typesAndVals[i]);
+			i++;
 		}
 		Matcher name = Regex.funcNamePattern.matcher(line);
 		name.find();
@@ -116,9 +110,7 @@ public class MasterBlock extends CodeBlock {
 		return new FunctionWrapper(params, funcName);
 	}
 
-
-
-	private static int initParams(String line, Matcher typesMatcher, ArrayList<VariableWrapper> params, String typesAndVal, int i) {
+	private static void initParams(String line, Matcher typesMatcher, ArrayList<VariableWrapper> params, String typesAndVal) {
 		String[] curValAndType = typesAndVal.split("\\s+");
 		String curParamName;
 		if (curValAndType[0].equals("(")) {
@@ -128,8 +120,6 @@ public class MasterBlock extends CodeBlock {
 		}
 		int start = typesMatcher.start(), end = typesMatcher.end();
 		params.add(new VariableWrapper(line.substring(start, end), true, curParamName));
-		i++;
-		return i;
 	}
 
 	private static String getVarName(String s) {

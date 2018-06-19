@@ -18,6 +18,7 @@ public class Regex {
 	private static final String methodName = "[a-zA-Z][a-zA-z0-9_]*";
 
 	private static final String varName = "[a-zA-Z_][a-zA-z0-9_]*";
+	public static final String FINAL_DEC = "\\s*final";
 
 	private static final String equalSignCheck = "[\\s]*=[\\s]*";
 
@@ -56,6 +57,7 @@ public class Regex {
 	public static final Pattern varLinePattern = Pattern.compile(varLineCheck);
 	//TODO when checking a final var line pattern you need to check initialization too because it must be initiliazed.
 	public static final Pattern finalVarLinePattern = Pattern.compile("[\\s]*" + "final[\\s]+" + varLineCheck);
+	public static final Pattern FINAL_PATTERN = Pattern.compile(FINAL_DEC);
 
 	public static final Pattern funcNamePattern = Pattern.compile(methodName);
 

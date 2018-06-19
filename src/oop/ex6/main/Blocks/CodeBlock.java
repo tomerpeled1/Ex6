@@ -79,11 +79,20 @@ public abstract class CodeBlock {
 		}
 		ArrayList<VariableWrapper> newVariables = new ArrayList<VariableWrapper>();
 		line = line.replaceFirst(Regex.variableTypeCheck, "");
-
+		boolean isFinal = false;
+		Matcher finalM = Regex.FINAL_PATTERN.matcher(line);
+		if (finalM.lookingAt()){
+			line = line.replaceFirst(Regex.FINAL_DEC, "");
+			isFinal = true;
+		}
 		String[] split = line.split("(\\s*,(\\s*)|\\s*;\\s*)");
 		for (String var : split) {
 			var = var.replaceAll("\\s", "");
 			String[] varComponents = var.split("=");
+			if (var.indexOf('=') < 0 && isFinal){
+				throw new IllegalLineException("error in line " + runner.getLineNumber() + ", final " +
+						"variables must be assigned at deceleration");
+			}
 			if (var.indexOf('=') >= 0 && varComponents.length == 1) {
 				throw new IllegalLineException("error in line " + runner.getLineNumber() + ", no given value.");
 			}
@@ -100,9 +109,9 @@ public abstract class CodeBlock {
 					throw new IllegalLineException("error in line " + runner.getLineNumber() +
 							", value doesn't match type.");
 				}
-				newVariables.add(new VariableWrapper(type, true, varComponents[0]));
+				newVariables.add(new VariableWrapper(type, true, varComponents[0],isFinal));
 			} else {
-				newVariables.add(new VariableWrapper(type, false, varComponents[0]));
+				newVariables.add(new VariableWrapper(type, false, varComponents[0],false));
 			}
 		}
 		return newVariables;//if it has no variables in it, it's ok.

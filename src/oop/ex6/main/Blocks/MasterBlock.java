@@ -37,14 +37,10 @@ public class MasterBlock extends CodeBlock {
 
 	}
 
-	private void checkLineForFunc(String line) {
-		Matcher funcDecM = Regex.funcLineStartPattern.matcher(line);
-		if (funcDecM.matches()) {
-			//TODO implement
-		}
-	}
 
-
+	/**
+	 * @return all functions of the program, as FunctionWrapper objects.
+	 */
 	public ArrayList<FunctionWrapper> getFuncs() {
 		return funcs;
 	}
@@ -84,7 +80,7 @@ public class MasterBlock extends CodeBlock {
 	}
 
 	/*
-	checks a line for global variables and methods
+	checks a line for global variables and methods, and creates new objects of those and adds them if necessary.
 	 */
 	private void checkGlobalLine(String line) throws IllegalLineException {
 
@@ -98,12 +94,7 @@ public class MasterBlock extends CodeBlock {
 
 	}
 
-	/*
-	gets a line of a variable deceleration, and returns a variable object. //TODO maybe dvir already did this.
-	 */
-	private static ArrayList<VariableWrapper> lineToVarObj(String line) throws IllegalLineException {
-		return null;
-	}
+
 
 	/*
 	gets a line of a function deceleration, and returns a function wrapper object.
@@ -134,6 +125,12 @@ public class MasterBlock extends CodeBlock {
 	}
 
 
+	/**
+	 * is used to initialize a VariableWrapper object from a code chunk, and add it to the list it gets.
+	 * @param params the list of VariableWrapper objects we want to add the current parameter to.
+	 * @param s the string from which we want to create the Variable. will be in a format of a
+	 *             variable deceleration.
+	 */
 	private static void initParam(ArrayList<VariableWrapper> params, String s) {
 
 		String[] temp = s.split("\\s+");
@@ -162,14 +159,14 @@ public class MasterBlock extends CodeBlock {
 //		return i;
 	}
 
-	private static String getVarName(String s) {
-		String curParamName;
-		if (s.endsWith(")")) {
-			curParamName = s.substring(0, s.length() - 1);
-		} else {
-			curParamName = s;
-		}
-		return curParamName;
-	}
+//	private static String getVarName(String s) { TODO clean here at the end if needed.
+//		String curParamName;
+//		if (s.endsWith(")")) {
+//			curParamName = s.substring(0, s.length() - 1);
+//		} else {
+//			curParamName = s;
+//		}
+//		return curParamName;
+//	}
 }
 

@@ -39,8 +39,8 @@ public class Regex {
 	//end of assignments checks.
 
 	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("\\s*void\\s+" + methodName + "\\s*\\(\\s*" +
-			"(\\s*" + type + "\\s+" + varName + "\\s*,\\s*)*" +
-			"(\\s*" + type + "\\s+" + varName + "\\s*)*\\)\\s*\\{\\s*");
+			"(\\s*((final)*\\s+)*" + type + "\\s+" + varName + "\\s*,\\s*)*" +
+			"(\\s*((final)*\\s+)*" + type + "\\s+" + varName + "\\s*)?\\)\\s*\\{\\s*");
 
 
 

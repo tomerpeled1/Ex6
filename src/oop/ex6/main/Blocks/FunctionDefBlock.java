@@ -1,5 +1,6 @@
 package oop.ex6.main.Blocks;
 
+import oop.ex6.main.FunctionWrapper;
 import oop.ex6.main.VariableWrapper;
 
 import java.util.ArrayList;

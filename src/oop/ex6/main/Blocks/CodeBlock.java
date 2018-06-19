@@ -18,6 +18,15 @@ public abstract class CodeBlock {
 
 
 	protected CodeBlock() {
+		setMaster();
+	}
+
+	/**
+	 * sets the master of this block to be the master lock of the file.
+	 */
+	private void setMaster() {
+		if (this instanceof MasterBlock) master = (MasterBlock) this;
+		else master = parent.getMaster();
 	}
 
 	/**
@@ -27,8 +36,7 @@ public abstract class CodeBlock {
 	 */
 	public CodeBlock(CodeBlock parent) {
 		this.parent = parent;
-		if (this instanceof MasterBlock) master = (MasterBlock) parent;
-		else master = parent.getMaster();
+		setMaster();
 
 	}
 
@@ -137,21 +145,44 @@ public abstract class CodeBlock {
 		return !var.getHasValue();
 	}
 
-	private boolean isFuncCallLegal(String line) {
+	private FunctionWrapper getFuncWrapperObj(String line) {
 		Matcher m = Regex.funcNamePattern.matcher(line);
 		if (m.find()) {
 			String name = line.substring(m.start(), m.end());
-			boolean legalFunc = false;
+			System.out.println(master);
 			for (FunctionWrapper func : master.getFuncs()) { // check if the function being called name
 				// is a name of a known function.
 				if (name.equals(func.getName())) {
-					legalFunc = true;
-					break;
+					return func;
 				}
 			}
-			if (!legalFunc) {
-				return false;
-			}
 		}
+		return null;
 	}
+
+	protected static String getBracketsString(String line) {
+		Matcher bracketsM = Regex.bracketsPattern.matcher(line);
+		boolean j = bracketsM.find(); // always true
+		return line.substring(bracketsM.start(),
+				bracketsM.end());
+	}
+
+	public boolean isFuncCallLegal(String line) { //todo change to private
+		//TODO check with dvir - maybe he splitted
+//		FunctionWrapper funcObj = getFuncWrapperObj(line);
+//		if (funcObj == null) {
+//			return false;
+//		}
+		String brackets = getBracketsString(line);
+		String[] params = brackets.split("\\s*,\\s*\\)*");
+
+		for (int i = 0; i <1; i++) {
+
+		}
+		return false;
+//		params[0] = params[0].substring(1,params[0].length()-1);
+
+	}
+
+
 }

@@ -24,6 +24,7 @@ public class MasterBlock extends CodeBlock {
 	}
 
 	private MasterBlock(){
+		super();
 		funcs = new ArrayList<FunctionWrapper>();
 		variables = new ArrayList<VariableWrapper>();
 		runner = new LinesRunner(lines);
@@ -104,10 +105,7 @@ public class MasterBlock extends CodeBlock {
 		Matcher typesMatcher = Regex.typePattern.matcher(line);
 		ArrayList<VariableWrapper> params = new ArrayList<VariableWrapper>();
 		Matcher paramName = Regex.varNamePattern.matcher(line);
-		Matcher bracketsM = Regex.bracketsPattern.matcher(line);
-		boolean j = bracketsM.find(); // always true
-		String brackets = line.substring(bracketsM.start(),
-				bracketsM.end());
+		String brackets = getBracketsString(line);
 		if (brackets.matches(".*\\s*,\\s*\\)\\s*")) {
 			throw new IllegalLineException(ERROR_START + runner.GetLineNumber() + FUNC_DEC_ERROR);
 		}
@@ -122,6 +120,8 @@ public class MasterBlock extends CodeBlock {
 		String funcName = line.substring(name.start(), name.end());
 		return new FunctionWrapper(params, funcName);
 	}
+
+
 
 	private static int initParams(String line, Matcher typesMatcher, ArrayList<VariableWrapper> params, String typesAndVal, int i) {
 		String[] curValAndType = typesAndVal.split("\\s+");

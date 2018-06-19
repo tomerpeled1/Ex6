@@ -27,13 +27,13 @@ public class Sjavac {
 
 		//TODO check args
 		String[] lines = null;
-		try {
-			lines = getLines(args[0]);
-		} catch (IOException e) {
-			System.err.println(IO_ERROR);
-			return;
-		}
-//		lines = new String[]{"void tomer(int j,boolean kk){"}; //todo delete
+//		try {
+//			lines = getLines(args[0]);
+//		} catch (IOException e) {
+//			System.err.println(IO_ERROR);
+//			return;
+//		}
+		lines = new String[]{"void tomer(int j,boolean kk){"}; //todo delete
 		MasterBlock master = MasterBlock.getInstance();
 		master.setLines(lines);
 		try {

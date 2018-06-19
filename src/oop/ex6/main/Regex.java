@@ -16,12 +16,17 @@ public class Regex {
 	private static final String equalSignCheck = "[\\s]*=[\\s]*";
 
 	//Assignments checks.
-	public static final Pattern intAssignment = Pattern.compile(varName + equalSignCheck + "[\\d]+");
-	public static final Pattern doubleAssignment = Pattern.compile(varName + equalSignCheck + DOUBLE_CHECK);
-	public static final Pattern charAssignment = Pattern.compile(varName + equalSignCheck + "'.'[\\s]*");
-	public static final Pattern booleanAssignment = Pattern.compile(varName + equalSignCheck +
-																	"(true|false)[\\s]*");
-	public static final Pattern stringAssignment = Pattern.compile(varName + equalSignCheck + "\".*\"[\\s]*");
+	private static final String intAssignment = equalSignCheck + "[\\d]+";
+	private static final String doubleAssignment = equalSignCheck + DOUBLE_CHECK;
+	private static final String charAssignment = equalSignCheck + "'.'[\\s]*";
+	private static final String booleanAssignment = equalSignCheck + "(true|false)[\\s]*";
+	private static final String stringAssignment = equalSignCheck + "\".*\"[\\s]*";
+
+	public static final Pattern intDeclarationAssignment = Pattern.compile(varName + intAssignment);
+	public static final Pattern doubleDeclarationAssignment = Pattern.compile(varName + doubleAssignment);
+	public static final Pattern charDeclarationAssignment = Pattern.compile(varName + charAssignment);
+	public static final Pattern booleanDeclarationAssignment = Pattern.compile(varName + booleanAssignment);
+	public static final Pattern stringDeclarationAssignment = Pattern.compile(varName + stringAssignment);
 	//end of assignments checks.
 
 	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("\\s*void\\s+" + methodName + "\\s*\\(\\s*" +

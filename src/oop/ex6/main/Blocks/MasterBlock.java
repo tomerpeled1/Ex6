@@ -108,7 +108,7 @@ public class MasterBlock extends CodeBlock {
 	/*
 	gets a line of a function deceleration, and returns a function wrapper object.
 	 */
-	private static FunctionWrapper lineToFuncObj(String line) throws IllegalLineException {
+	public static FunctionWrapper lineToFuncObj(String line) throws IllegalLineException { //TODO change to private
 		Matcher format = Regex.FUNCTION_TEMPLATE.matcher(line);
 		if (!format.matches()) {
 			throw new IllegalLineException(ERROR_START + runner.GetLineNumber() + FUNC_DEC_ERROR);
@@ -123,7 +123,8 @@ public class MasterBlock extends CodeBlock {
 		String[] typesAndVals = brackets.split(",");
 		int i = 0;
 		while (typesMatcher.find()) {
-			i = initParams(line, typesMatcher, params, typesAndVals[i], i);
+			initParam(params, typesAndVals[i]);
+			i++;
 		}
 		Matcher name = Regex.funcNamePattern.matcher(line);
 		name.find();
@@ -133,18 +134,32 @@ public class MasterBlock extends CodeBlock {
 	}
 
 
-	private static int initParams(String line, Matcher typesMatcher, ArrayList<VariableWrapper> params, String typesAndVal, int i) {
-		String[] curValAndType = typesAndVal.split("\\s+");
-		String curParamName;
-		if (curValAndType[0].equals("(")) {
-			curParamName = getVarName(curValAndType[2]);
-		} else {
-			curParamName = getVarName(curValAndType[1]);
+	private static void initParam(ArrayList<VariableWrapper> params, String s) {
+
+		String[] temp = s.split("\\s+");
+		for (int j = 0; j < temp.length; j++) {
+			temp[j] = temp[j].replaceAll("\\(","");
 		}
-		int start = typesMatcher.start(), end = typesMatcher.end();
-		params.add(new VariableWrapper(line.substring(start, end), true, curParamName));
-		i++;
-		return i;
+		switch (temp.length){
+			case 2:
+				params.add(new VariableWrapper(temp[0],true,temp[1],false));
+				break;
+			case 3:
+				params.add(new VariableWrapper(temp[1],true,temp[2],true));
+				break;
+		}
+
+//		String[] curValAndType = s.split("\\s+");
+//		String curParamName;
+//		if (curValAndType[0].equals("(")) {
+//			curParamName = getVarName(curValAndType[2]);
+//		} else {
+//			curParamName = getVarName(curValAndType[1]);
+//		}
+//		int start = typesMatcher.start(), end = typesMatcher.end();
+//		params.add(new VariableWrapper(line.substring(start, end), true, curParamName));
+//		i++;
+//		return i;
 	}
 
 	private static String getVarName(String s) {

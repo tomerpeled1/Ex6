@@ -46,15 +46,15 @@ public class MasterBlock extends CodeBlock {
 
 	//TODO
 
-	/*
-	initializes lists of all the global methods and variables
+	/**
+	 * Initiliazes the the functions and global variables of the master block.
+	 * @throws IllegalLineException If
 	 */
 	public void getGlobalDataMembers()
 			throws IllegalLineException {
 		int openBraces = 0;
 		String line = runner.GetNextLine();
 		while (line != null) {
-
 			if (openBraces == 0) {
 				checkGlobalLine(line);
 			}
@@ -65,7 +65,6 @@ public class MasterBlock extends CodeBlock {
 			}
 			line = runner.GetNextLine();
 		}
-		System.out.println(this.funcs);
 	}
 
 	/*
@@ -75,22 +74,18 @@ public class MasterBlock extends CodeBlock {
 
 		Matcher funcLineStart = Regex.funcLineStartPattern.matcher(line);
 		Matcher varLineStart = Regex.varLinePattern.matcher(line);
-		if (funcLineStart.lookingAt()) {
+		if (funcLineStart.matches()) {
 			this.funcs.add(lineToFuncObj(line));
-		} else if (varLineStart.lookingAt()) {
-			this.variables.add(lineToVarObj(line));
+		} else if (varLineStart.matches()) {
+			this.variables.addAll(lineToVarObj(line));
 		}
+
 	}
 
 	/*
 	gets a line of a variable deceleration, and returns a variable object. //TODO maybe dvir already did this.
 	 */
-	private static VariableWrapper lineToVarObj(String line) throws IllegalLineException {
-		Matcher varTemplateM = Regex.VARIABLE_TEMPLATE.matcher(line);
-		if (!varTemplateM.matches()) {
-			throw new IllegalLineException(ERROR_START + runner.GetLineNumber() + VAR_ERROR);
-		}
-		String[] temp = line.split("\\s");
+	private static ArrayList<VariableWrapper> lineToVarObj(String line) throws IllegalLineException {
 		return null;
 	}
 
@@ -100,7 +95,7 @@ public class MasterBlock extends CodeBlock {
 	private static FunctionWrapper lineToFuncObj(String line) throws IllegalLineException {
 		Matcher format = Regex.FUNCTION_TEMPLATE.matcher(line);
 		if (!format.matches()){
-			throw new IllegalLineException(ERROR_START + runner.GetLineNumber() + FUNC_DEC_ERROR); //TODO add excewption massege with line.
+			throw new IllegalLineException(ERROR_START + runner.GetLineNumber() + FUNC_DEC_ERROR);
 		}
 		Matcher typesMatcher = Regex.typePattern.matcher(line);
 		ArrayList<VariableWrapper> params = new ArrayList<VariableWrapper>();

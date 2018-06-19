@@ -43,9 +43,6 @@ public class Regex {
 			"(\\s*" + type + "\\s+" + varName + "\\s*)*\\)\\s*\\{\\s*");
 
 
-	public static final Pattern VARIABLE_TEMPLATE = Pattern.compile("\\s*" + type + "\\s+" +
-			varName + "\\s*;");
-
 
 	public static final Pattern IF_PATTERN = Pattern.compile("\\s*if\\s*\\(.+\\)\\s*\\{");
 	public static final Pattern WHILE_PATTERN = Pattern.compile("\\s*while\\s*\\(.+\\)\\s*\\{");

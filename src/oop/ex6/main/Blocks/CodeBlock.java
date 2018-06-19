@@ -26,7 +26,7 @@ public abstract class CodeBlock {
 	 */
 	private void setMaster() {
 		if (this instanceof MasterBlock) master = (MasterBlock) this;
-		else master = parent.getMaster();
+		else master = parent.master;
 	}
 
 	/**
@@ -37,22 +37,14 @@ public abstract class CodeBlock {
 	public CodeBlock(CodeBlock parent) {
 		this.parent = parent;
 		setMaster();
-
 	}
 
-	/*
-	returns the master of the program.
-	 */
-	private MasterBlock getMaster() {
-		return master;
-	}
 
 	public void run() throws IllegalLineException {
 		String line = runner.GetNextLine();
 		Matcher BLOCK_END_MATCHER = Regex.BLOCK_END_PATTERN.matcher(line);
 		while (!BLOCK_END_MATCHER.matches()) {
 			CodeBlock nextBlock = null;
-
 			if (line.startsWith("//")){
 				line = runner.GetNextLine();
 				continue;
@@ -75,6 +67,14 @@ public abstract class CodeBlock {
 		}
 	}
 
+	/**
+	 * Gets a declaration line and returns the wrappers for the declared variables.
+	 * @param line The declaration line for creating variables objects.
+	 * @return An ArrayList of VariableWrapper.
+	 */
+	protected ArrayList<VariableWrapper> lineToVarObj(String line) {
+
+	}
 
 	/**
 	 * Checks if a line opens a new if or while block.
@@ -151,6 +151,11 @@ public abstract class CodeBlock {
 		return !var.getHasValue();
 	}
 
+	/**
+	 * Gets the relevant function wrapper object from the list of functions.
+	 * @param line The current line in the file.
+	 * @return The function wrapper for the line, otherwise null.
+	 */
 	private FunctionWrapper getFuncWrapperObj(String line) {
 		Matcher m = Regex.funcNamePattern.matcher(line);
 		if (m.find()) {
@@ -167,7 +172,7 @@ public abstract class CodeBlock {
 	}
 
 	/**
-	 * @param line an string of a line
+	 * @param line a string of a line
 	 * @return a string contains only the brackets and its contents.
 	 */
 	protected static String getBracketsString(String line) {
@@ -181,7 +186,7 @@ public abstract class CodeBlock {
 	 * @param line the line where the function call happens.
 	 * @return true if the call is legal, false otherwise.
 	 */
-	public boolean isFuncCallLegal(String line) { //TODO change to private
+	protected boolean isFuncCallLegal(String line) {
 		FunctionWrapper funcObj = getFuncWrapperObj(line);
 		if (funcObj == null) {
 			return false;

@@ -12,8 +12,13 @@ public class FunctionWrapper {
 
 	private ArrayList<oop.ex6.main.VariableWrapper> params;
 
+	public ArrayList<VariableWrapper> getParams() {
+		return params;
+	}
+
 	public FunctionWrapper(ArrayList<oop.ex6.main.VariableWrapper> params, String name){
 		this.name = name;
+
 		this.params = params;
 	}
 

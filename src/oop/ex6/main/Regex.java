@@ -6,6 +6,11 @@ public class Regex {
 
 	public static final String DOUBLE_CHECK = "(([\\d]+[.]*[\\d]*)|([\\d]*[.]*[\\d]+))";
 	public static final Pattern DOUBLE_PATTERN = Pattern.compile(DOUBLE_CHECK);
+	public static final Pattern INT_PATTERN = Pattern.compile("[\\d]+");
+	public static final Pattern CHAR_PATTERN = Pattern.compile("'.'");
+	public static final Pattern STRING_PATTERN = Pattern.compile("\".*\"");
+	public static final Pattern BOOLEAN_PATTERN = Pattern.compile("(true|false|" + DOUBLE_CHECK +")");
+
 
 	private static final String type = "(int|double|String|boolean|char)";
 
@@ -21,6 +26,10 @@ public class Regex {
 	private static final String charAssignment = equalSignCheck + "'.'[\\s]*";
 	private static final String booleanAssignment = equalSignCheck + "(true|false)[\\s]*";
 	private static final String stringAssignment = equalSignCheck + "\".*\"[\\s]*";
+
+
+
+
 
 	public static final Pattern intDeclarationAssignment = Pattern.compile(varName + intAssignment);
 	public static final Pattern doubleDeclarationAssignment = Pattern.compile(varName + doubleAssignment);
@@ -56,7 +65,7 @@ public class Regex {
 
 	public static final Pattern BLOCK_END_PATTERN = Pattern.compile("\\s*}\\s*");
 
-	public static final String BOOLEAN_EXPRESSION_SPLIT = "\\s*(\\|\\||&&)*\\s*";
+	public static final String BOOLEAN_EXPRESSION_SPLIT = "\\s*(\\|\\||&&)+\\s*";
 
 
 }

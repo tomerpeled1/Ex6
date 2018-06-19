@@ -167,21 +167,82 @@ public abstract class CodeBlock {
 				bracketsM.end());
 	}
 
-	public boolean isFuncCallLegal(String line) { //todo change to private
-		//TODO check with dvir - maybe he splitted
-//		FunctionWrapper funcObj = getFuncWrapperObj(line);
-//		if (funcObj == null) {
-//			return false;
-//		}
-		String brackets = getBracketsString(line);
-		String[] params = brackets.split("\\s*,\\s*\\)*");
-
-		for (int i = 0; i <1; i++) {
-
+	/**
+	 *
+	 * @param line the line where the function call happens.
+	 * @return true if the call is legal, false otherwise.
+	 */
+	public boolean isFuncCallLegal(String line) { //TODO change to private
+		FunctionWrapper funcObj = getFuncWrapperObj(line);
+		if (funcObj == null) {
+			return false;
 		}
-		return false;
-//		params[0] = params[0].substring(1,params[0].length()-1);
+		Matcher bracketsM = Regex.bracketsPattern.matcher(line);
+		boolean j = bracketsM.find();
+		String brackets = line.substring(bracketsM.start()+1, bracketsM.end()-1);
+		ArrayList<VariableWrapper> funcActualParams = funcObj.getParams();
+		if (brackets.equals("")){
+			return funcActualParams == null;
+		}
+		String[] params = brackets.split("\\s*,\\s*");
+		params[0] = params[0].replaceAll("\\s+","");
+		params[params.length-1] = params[params.length-1].replaceAll("\\s+","");
 
+		if (params.length != funcActualParams.size()){
+			return false;
+		}
+
+		for (int i = 0; i <params.length; i++) {
+			VariableWrapper variableIfExists = getVariableIfExists(params[i]);
+			VariableWrapper.Types wantedType = funcActualParams.get(i).getType();
+
+			if (variableIfExists != null && !(variableIfExists.getType() == wantedType)){
+					return false;
+			}
+			Matcher m = setMatcherFromType(wantedType,params[i]);
+			if (!m.matches()){
+				return false;
+			}
+		}
+		return true;
+
+	}
+
+	/**
+	 * @param wantedType the type to fit to
+	 * @param param the wanted param to be checked
+	 * @return a matcher object for the param (a parameter that a function os called with) and the wanted type.
+	 */
+	private Matcher setMatcherFromType(VariableWrapper.Types wantedType, String param) {
+		Matcher m;
+		switch (wantedType){
+			case INT:
+				m = Regex.INT_PATTERN.matcher(param);
+				return m;
+			case DOUBLE:
+				m = Regex.DOUBLE_PATTERN.matcher(param);
+				return m;
+			case STRING:
+				m = Regex.STRING_PATTERN.matcher(param);
+				return m;
+			case BOOLEAN:
+				m = Regex.BOOLEAN_PATTERN.matcher(param);
+				return m;
+			case CHAR:
+				m = Regex.CHAR_PATTERN.matcher(param);
+				return m;
+		}
+		return null; //will never get here
+	}
+
+	protected VariableWrapper getVariableIfExists(String name){
+		for (VariableWrapper var:this.variables){
+			if (var.getName().equals(name)){
+				return var;
+			}
+		}
+		if (this.parent == null) return null;
+		return parent.getVariableIfExists(name);
 	}
 
 

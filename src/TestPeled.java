@@ -12,7 +12,7 @@ public class TestPeled {
 
 		MasterBlock m = MasterBlock.getInstance();
 
-		System.out.println(m.isFuncCallLegal("tomer( k , 5 )"));
+		System.out.println(m.isFuncCallLegal("tomer( kgg ,5 )"));
 	}
 
 

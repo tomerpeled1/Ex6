@@ -1,7 +1,7 @@
 package oop.ex6.main;
 
 public class VariableWrapper {
-	enum Types {
+	public enum Types {
 		INT, STRING,DOUBLE, BOOLEAN, CHAR
 	}
 

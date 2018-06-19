@@ -17,7 +17,7 @@ public class TestDvir {
 //        for (String str: splitted) {
 //            System.out.println(str);
 //        }
-        String x = "  int = 33";
+        String x = "x = 33, y = 32;";
         String y = x.replaceFirst("[\\s]*int[\\s]*", "");
         System.out.println(y);
         Matcher m = Pattern.compile("\\s*int\\s*").matcher(x);

@@ -20,7 +20,7 @@ public class LinesRunner {
      * Gets the next line in the array.
      * @return A String with the line.
      */
-    public String GetNextLine() {
+    public String getNextLine() {
         if (currentPlace >= lines.length) {
             return null;
         }
@@ -31,7 +31,7 @@ public class LinesRunner {
      * Gets the number of the line that was returned before.
      * @return the number of the last line returned.
      */
-    public int GetLineNumber() {
+    public int getLineNumber() {
         return currentPlace;
     }
 

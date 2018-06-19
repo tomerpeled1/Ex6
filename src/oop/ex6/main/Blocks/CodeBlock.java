@@ -1,6 +1,5 @@
 package oop.ex6.main.Blocks;
 
-import com.sun.org.apache.bcel.internal.classfile.Code;
 import oop.ex6.main.FunctionWrapper;
 import oop.ex6.main.VariableWrapper;
 import oop.ex6.main.IllegalLineException;
@@ -8,7 +7,6 @@ import oop.ex6.main.Regex;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class CodeBlock {
 	protected ArrayList<VariableWrapper> variables;
@@ -36,17 +34,18 @@ public abstract class CodeBlock {
 	 */
 	public CodeBlock(CodeBlock parent) {
 		this.parent = parent;
-		setMaster();
+		this.variables = new ArrayList<VariableWrapper>();
+		//setMaster();
 	}
 
 
 	public void run() throws IllegalLineException {
-		String line = runner.GetNextLine();
+		String line = runner.getNextLine();
 		Matcher BLOCK_END_MATCHER = Regex.BLOCK_END_PATTERN.matcher(line);
 		while (!BLOCK_END_MATCHER.matches()) {
 			CodeBlock nextBlock = null;
 			if (line.startsWith("//")){
-				line = runner.GetNextLine();
+				line = runner.getNextLine();
 				continue;
 			}
 
@@ -63,7 +62,7 @@ public abstract class CodeBlock {
 			if (nextBlock != null) {
 				nextBlock.run();
 			}
-			line = runner.GetNextLine();
+			line = runner.getNextLine();
 		}
 	}
 
@@ -72,9 +71,43 @@ public abstract class CodeBlock {
 	 * @param line The declaration line for creating variables objects.
 	 * @return An ArrayList of VariableWrapper.
 	 */
-	protected ArrayList<VariableWrapper> lineToVarObj(String line) {
+	public ArrayList<VariableWrapper> lineToVarObj(String line) throws IllegalLineException {
+		Matcher typeNameMatcher = Regex.typePattern.matcher(line);
+		String type = "";
+		if (typeNameMatcher.find()) {
+			type = line.substring(typeNameMatcher.start(), typeNameMatcher.end());
+		}
+		ArrayList<VariableWrapper> newVariables = new ArrayList<VariableWrapper>();
+		line = line.replaceFirst(Regex.variableTypeCheck, "");
 
+		String[] split = line.split("(\\s*,(\\s*)|\\s*;\\s*)");
+		for (String var : split) {
+			var = var.replaceAll("\\s", "");
+			String[] varComponents = var.split("=");
+			if (var.indexOf('=') >= 0 && varComponents.length == 1) {
+				throw new IllegalLineException("error in line " + runner.getLineNumber() + ", no given value.");
+			}
+			if (varComponents.length > 2) {
+				throw new IllegalLineException("error in line " + runner.getLineNumber());
+			}
+			Matcher m = Regex.varNamePattern.matcher(varComponents[0]);
+			if (!m.matches() || checkIfBlockVariable(varComponents[0])) {
+				throw new IllegalLineException("error in line " + runner.getLineNumber() +
+												", can't initialize variable.");
+			}
+			if (varComponents.length == 2) {
+				if (!checkIfValueMatchType(VariableWrapper.stringToTypes(type), varComponents[1])) {
+					throw new IllegalLineException("error in line " + runner.getLineNumber() +
+							", value doesn't match type.");
+				}
+				newVariables.add(new VariableWrapper(type, true, varComponents[0]));
+			} else {
+				newVariables.add(new VariableWrapper(type, false, varComponents[0]));
+			}
+		}
+		return newVariables;//if it has no variables in it, it's ok.
 	}
+
 
 	/**
 	 * Checks if a line opens a new if or while block.
@@ -97,7 +130,7 @@ public abstract class CodeBlock {
 				Matcher doubleMatch = Regex.DOUBLE_PATTERN.matcher(exp);
 				if (!(exp.equals("true") || exp.equals("false") || doubleMatch.matches() ||
 						checkIfInitializedVariable(exp))) {
-					throw new IllegalLineException("error in line " + runner.GetLineNumber() + ", boolean " +
+					throw new IllegalLineException("error in line " + runner.getLineNumber() + ", boolean " +
 							"expression not supported.");
 				}
 			}
@@ -106,20 +139,15 @@ public abstract class CodeBlock {
 		return false;
 	}
 
-	/**
-	 * Checks if a variable is in the list, if it is return the varible object if not returns null.
-	 *
-	 * @param name The name of the variable to check if is in the list.
-	 * @return The variable object if it's in the list, otherwise null.
-	 */
-	private VariableWrapper getVariableFromList(String name) {
-		for (VariableWrapper var : variables) {
-			if (var.getName().equals(name)) {
-				return var;
+	private boolean checkIfBlockVariable(String name){
+			for (VariableWrapper var : variables) {
+				if (var.getName().equals(name)) {
+					return true;
+				}
 			}
+			return false;
 		}
-		return null;
-	}
+
 
 	/**
 	 * Checks if a variable is an initialized variable.
@@ -129,7 +157,7 @@ public abstract class CodeBlock {
 	 * @return True if it's initialized, false else.
 	 */
 	protected boolean checkIfInitializedVariable(String name) {
-		VariableWrapper var = getVariableFromList(name);
+		VariableWrapper var = getVariableIfExists(name);
 		if (var == null) {//not even in the list.
 			return false;
 		}
@@ -144,7 +172,7 @@ public abstract class CodeBlock {
 	 * @return True if it's uninitialized, false else.
 	 */
 	protected boolean checkIfUninitializedVariable(String name) {
-		VariableWrapper var = getVariableFromList(name);
+		VariableWrapper var = getVariableIfExists(name);
 		if (var == null) {//not even in the list.
 			return false;
 		}
@@ -210,8 +238,7 @@ public abstract class CodeBlock {
 			if (variableIfExists != null && !(variableIfExists.getType() == wantedType)){
 					return false;
 			}
-			Matcher m = setMatcherFromType(wantedType,params[i]);
-			if (!m.matches()){
+			if (!checkIfValueMatchType(wantedType, params[i])) {
 				return false;
 			}
 		}
@@ -224,35 +251,43 @@ public abstract class CodeBlock {
 	 * @param param the wanted param to be checked
 	 * @return a matcher object for the param (a parameter that a function os called with) and the wanted type.
 	 */
-	private Matcher setMatcherFromType(VariableWrapper.Types wantedType, String param) {
+	private boolean checkIfValueMatchType(VariableWrapper.Types wantedType, String param) {
 		Matcher m;
 		switch (wantedType){
 			case INT:
 				m = Regex.INT_PATTERN.matcher(param);
-				return m;
+				return m.matches();
 			case DOUBLE:
 				m = Regex.DOUBLE_PATTERN.matcher(param);
-				return m;
+				return m.matches();
 			case STRING:
 				m = Regex.STRING_PATTERN.matcher(param);
-				return m;
+				return m.matches();
 			case BOOLEAN:
 				m = Regex.BOOLEAN_PATTERN.matcher(param);
-				return m;
+				return m.matches();
 			case CHAR:
 				m = Regex.CHAR_PATTERN.matcher(param);
-				return m;
+				return m.matches();
 		}
-		return null; //will never get here
+		return false; //will never get here
 	}
 
+	/**
+	 * Checks if a variable is in the list, if it is return the varible object if not returns null.
+	 *
+	 * @param name The name of the variable to check if is in the list.
+	 * @return The variable object if it's in the list, otherwise null.
+	 */
 	protected VariableWrapper getVariableIfExists(String name){
 		for (VariableWrapper var:this.variables){
 			if (var.getName().equals(name)){
 				return var;
 			}
 		}
-		if (this.parent == null) return null;
+		if (this.parent == null) {
+			return null;
+		}
 		return parent.getVariableIfExists(name);
 	}
 

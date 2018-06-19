@@ -8,9 +8,6 @@ import oop.ex6.main.VariableWrapper;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
-/**
- * A singleton represents the global block (scope) of code.
- */
 public class MasterBlock extends CodeBlock {
 
 	private static final String ERROR_START = "Error in line ";
@@ -26,7 +23,7 @@ public class MasterBlock extends CodeBlock {
 		return ourInstance;
 	}
 
-	private MasterBlock() {
+	private MasterBlock(){
 		super();
 		funcs = new ArrayList<FunctionWrapper>();
 		variables = new ArrayList<VariableWrapper>();
@@ -34,27 +31,16 @@ public class MasterBlock extends CodeBlock {
 
 	}
 
-	@Override
-	public void run() throws IllegalLineException {
-		//TODO implement
-
-	}
-
-
-	/**
-	 * @return all functions of the program, as FunctionWrapper objects.
-	 */
 	public ArrayList<FunctionWrapper> getFuncs() {
 		return funcs;
 	}
 
 	/**
 	 * sets the lines if the master block.
-	 *
 	 * @param lines array of lines.
 	 */
-	public void setLines(String[] lines) {
-		this.lines = lines;
+	public void setLines(String[] lines){
+		this.lines =  lines;
 		runner.setLines(lines);
 	}
 
@@ -62,13 +48,12 @@ public class MasterBlock extends CodeBlock {
 
 	/**
 	 * Initiliazes the the functions and global variables of the master block.
-	 *
 	 * @throws IllegalLineException If
 	 */
 	public void getGlobalDataMembers()
 			throws IllegalLineException {
 		int openBraces = 0;
-		String line = runner.GetNextLine();
+		String line = runner.getNextLine();
 		while (line != null) {
 			if (openBraces == 0) {
 				checkGlobalLine(line);
@@ -78,12 +63,12 @@ public class MasterBlock extends CodeBlock {
 			} else if (line.endsWith("}")) {
 				openBraces -= 1;
 			}
-			line = runner.GetNextLine();
+			line = runner.getNextLine();
 		}
 	}
 
 	/*
-	checks a line for global variables and methods, and creates new objects of those and adds them if necessary.
+	checks a line for global variables and methods
 	 */
 	private void checkGlobalLine(String line) throws IllegalLineException {
 
@@ -97,22 +82,20 @@ public class MasterBlock extends CodeBlock {
 
 	}
 
-
-
 	/*
 	gets a line of a function deceleration, and returns a function wrapper object.
 	 */
-	public static FunctionWrapper lineToFuncObj(String line) throws IllegalLineException { //TODO change to private
+	private static FunctionWrapper lineToFuncObj(String line) throws IllegalLineException {
 		Matcher format = Regex.FUNCTION_TEMPLATE.matcher(line);
-		if (!format.matches()) {
-			throw new IllegalLineException(ERROR_START + runner.GetLineNumber() + FUNC_DEC_ERROR);
+		if (!format.matches()){
+			throw new IllegalLineException(ERROR_START + runner.getLineNumber() + FUNC_DEC_ERROR);
 		}
 		Matcher typesMatcher = Regex.typePattern.matcher(line);
 		ArrayList<VariableWrapper> params = new ArrayList<VariableWrapper>();
 		Matcher paramName = Regex.varNamePattern.matcher(line);
 		String brackets = getBracketsString(line);
 		if (brackets.matches(".*\\s*,\\s*\\)\\s*")) {
-			throw new IllegalLineException(ERROR_START + runner.GetLineNumber() + FUNC_DEC_ERROR);
+			throw new IllegalLineException(ERROR_START + runner.getLineNumber() + FUNC_DEC_ERROR);
 		}
 		String[] typesAndVals = brackets.split(",");
 		int i = 0;
@@ -124,6 +107,10 @@ public class MasterBlock extends CodeBlock {
 		name.find();
 		name.find(); //twice to skip "void".
 		String funcName = line.substring(name.start(), name.end());
+		if (funcName.equals("void")) {
+            throw new IllegalLineException("error in line " + runner.getLineNumber() +
+                    ", function can't be named void");
+        }
 		return new FunctionWrapper(params, funcName);
 	}
 

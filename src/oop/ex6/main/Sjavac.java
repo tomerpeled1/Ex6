@@ -9,9 +9,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
+/**
+ * the main class. it gets a sjava file name and checks if the file will be able to compile.
+ */
 public class Sjavac {
 
 	private final static String IO_ERROR = "IO Error - problem with the file";
+	public static final String ARGS_NUM_ERROR = "The program should get exactly one argument.";
 
 	/*
 	returns an array of all lines in file, as Strings
@@ -23,8 +27,14 @@ public class Sjavac {
 		return lines;
 	}
 
+
 	public static void main(String[] args){
 
+		if (args.length != 2){
+			System.err.println(ARGS_NUM_ERROR);
+			System.out.println(2);
+			return;
+		}
 		//TODO check args
 		String[] lines = null;
 //		try {

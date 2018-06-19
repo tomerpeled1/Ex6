@@ -1,5 +1,8 @@
 package oop.ex6.main.Blocks;
 
+/**
+ * this class runs on the lines and keeps the number of line it is in.
+ */
 public class LinesRunner {
     private String[] lines;
     private int currentPlace;
@@ -32,6 +35,10 @@ public class LinesRunner {
         return currentPlace;
     }
 
+    /**
+     * sets the runner's lines t5o be the parameter the function gets.
+     * @param lines list of lines of the file
+     */
     public void setLines(String[] lines) {
         this.lines = lines;
     }

@@ -8,6 +8,9 @@ import oop.ex6.main.VariableWrapper;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
+/**
+ * A singleton represents the global block (scope) of code.
+ */
 public class MasterBlock extends CodeBlock {
 
 	private static final String ERROR_START = "Error in line ";

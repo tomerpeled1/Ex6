@@ -68,12 +68,17 @@ public abstract class CodeBlock {
 		}
 	}
 
+	protected VariableWrapper assignmentLineToVarObj(String line) throws IllegalLineException {
+		line = line.replaceAll("\\s", "");
+
+	}
+
 	/**
 	 * Gets a declaration line and returns the wrappers for the declared variables.
 	 * @param line The declaration line for creating variables objects.
 	 * @return An ArrayList of VariableWrapper.
 	 */
-	public ArrayList<VariableWrapper> lineToVarObj(String line) throws IllegalLineException {
+	protected ArrayList<VariableWrapper> declarationLineToVarObj(String line) throws IllegalLineException {
 		Matcher typeNameMatcher = Regex.typePattern.matcher(line);
 		String type = "";
 		if (typeNameMatcher.find()) {
@@ -93,7 +98,7 @@ public abstract class CodeBlock {
 			String[] varComponents = var.split("=");
 			if (var.indexOf('=') < 0 && isFinal){
 				throw new IllegalLineException("error in line " + runner.getLineNumber() + ", final " +
-						"variables must be assigned at deceleration");
+						"variables must be assigned at declaration");
 			}
 			if (var.indexOf('=') >= 0 && varComponents.length == 1) {
 				throw new IllegalLineException("error in line " + runner.getLineNumber() + ", no given value.");
@@ -118,7 +123,6 @@ public abstract class CodeBlock {
 		}
 		return newVariables;//if it has no variables in it, it's ok.
 	}
-
 
 	/**
 	 * Checks if a line opens a new if or while block.
@@ -150,6 +154,8 @@ public abstract class CodeBlock {
 		return false;
 	}
 
+
+	//variable checks.
 	private boolean checkIfBlockVariable(String name){
 			for (VariableWrapper var : variables) {
 				if (var.getName().equals(name)) {
@@ -158,7 +164,6 @@ public abstract class CodeBlock {
 			}
 			return false;
 		}
-
 
 	/**
 	 * Checks if a variable is an initialized variable.
@@ -189,6 +194,8 @@ public abstract class CodeBlock {
 		}
 		return !var.getHasValue();
 	}
+	//end of variable checks.
+
 
 	/**
 	 * Gets the relevant function wrapper object from the list of functions.

@@ -19,6 +19,6 @@ public class FunctionDefBlock extends SubBlock {
         if (!Regex.RETURN_PATTERN.matcher(line).matches()) {
             return false;
         }
-        return Regex.BLOCK_END_PATTERN.matcher(nextLine).matches());
+        return Regex.BLOCK_END_PATTERN.matcher(nextLine).matches();
     }
 }

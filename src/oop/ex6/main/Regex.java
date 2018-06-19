@@ -11,6 +11,7 @@ public class Regex {
 	public static final Pattern STRING_PATTERN = Pattern.compile("\".*\"");
 	public static final Pattern BOOLEAN_PATTERN = Pattern.compile("(true|false|" + DOUBLE_CHECK +")");
 
+	public static final Pattern RETURN_PATTERN = Pattern.compile("[\\s]*return[\\s]*;[\\s]*");
 
 	private static final String type = "(int|double|String|boolean|char)";
 	public static final String variableTypeCheck = "\\s*" + type + "\\s*";

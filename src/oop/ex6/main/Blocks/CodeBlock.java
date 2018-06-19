@@ -49,6 +49,8 @@ public abstract class CodeBlock {
 				continue;
 			}
 
+			//TODO when checking the end, get the next line, save it, call the function check end and than run on the next line.
+
 			//TODO check if variable declaration (aka int x = 3), check that it's not in this scope variables(can be in others)
 
 			//TODO check if variable assigment (aka x = 3)

@@ -9,10 +9,12 @@ import java.util.ArrayList;
 
 public class FunctionDefBlock extends SubBlock {
 
+    private FunctionWrapper wrapper;
 
-    public FunctionDefBlock (ArrayList<VariableWrapper> functionParameters, MasterBlock parent) {
+    public FunctionDefBlock (FunctionWrapper wrapper, MasterBlock parent) {
         super(parent);
-        this.variables.addAll(functionParameters);
+        this.variables.addAll(wrapper.getParams());
+        this.wrapper = wrapper;
     }
 
     protected boolean checkEnd(String line, String nextLine) {

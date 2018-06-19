@@ -51,6 +51,7 @@ public class Regex {
 	public static final Pattern WHILE_PATTERN = Pattern.compile("\\s*while\\s*\\(.+\\)\\s*\\{");
 
 	public static final Pattern typePattern = Pattern.compile(type);
+	public static final Pattern VarDecStart = Pattern.compile("\\s*((final)*\\s+" +type + ")|" + type);
 	public static final Pattern varNamePattern = Pattern.compile(varName);
 	public static final Pattern bracketsPattern = Pattern.compile("\\(.*\\)");
 	public static final Pattern funcLineStartPattern = Pattern.compile("\\s*void");
@@ -59,6 +60,9 @@ public class Regex {
 	//TODO when checking a final var line pattern you need to check initialization too because it must be initiliazed.
 	public static final Pattern finalVarLinePattern = Pattern.compile("[\\s]*" + "final[\\s]+" + varLineCheck);
 	public static final Pattern FINAL_PATTERN = Pattern.compile(FINAL_DEC);
+	public static final Pattern EMPTY_LINE_PATTERN = Pattern.compile("\\s*");
+	public static final Pattern OPEN_BLOCK_PATTERN = Pattern.compile(".*\\{\\s*");
+	public static final Pattern CLOSE_BLOCK_PATTERN = Pattern.compile("\\s*\\{\\s*");
 
 	public static final Pattern funcNamePattern = Pattern.compile(methodName);
 

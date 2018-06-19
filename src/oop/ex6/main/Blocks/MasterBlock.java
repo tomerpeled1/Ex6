@@ -15,7 +15,7 @@ public class MasterBlock extends CodeBlock {
 	private static final String VAR_ERROR = " variable deceleration is done poorly.";
 	private static final String FUNC_DEC_ERROR = " function deceleration is done poorly.";
 
-	private ArrayList<FunctionWrapper> funcs;
+	private ArrayList<FunctionDefBlock> funcs;
 
 	private static MasterBlock ourInstance = new MasterBlock();
 	private String[] lines;
@@ -26,13 +26,13 @@ public class MasterBlock extends CodeBlock {
 
 	private MasterBlock() {
 		super();
-		funcs = new ArrayList<FunctionWrapper>();
+		funcs = new ArrayList<FunctionDefBlock>();
 		variables = new ArrayList<VariableWrapper>();
 		runner = null;
 
 	}
 
-	public ArrayList<FunctionWrapper> getFuncs() {
+	public ArrayList<FunctionDefBlock> getFuncs() {
 		return funcs;
 	}
 
@@ -58,12 +58,15 @@ public class MasterBlock extends CodeBlock {
 		int openBraces = 0;
 		String line = runner.getNextLine();
 		while (line != null) {
+			Matcher openScope = Regex.OPEN_BLOCK_PATTERN.matcher(line);
+			Matcher closeScope = Regex.CLOSE_BLOCK_PATTERN.matcher(line);
+
 			if (openBraces == 0) {
 				checkGlobalLine(line);
 			}
-			if (line.endsWith("{")) {
+			if (openScope.matches()) { //TODO fix this to regex with \\s*
 				openBraces += 1;
-			} else if (line.endsWith("}")) {
+			} else if (closeScope.matches()) {
 				openBraces -= 1;
 			}
 			line = runner.getNextLine();
@@ -71,17 +74,39 @@ public class MasterBlock extends CodeBlock {
 	}
 
 	/*
-	checks a line for global variables and methods
+	checks a line
 	 */
 	private void checkGlobalLine(String line) throws IllegalLineException {
 
-		Matcher funcLineStart = Regex.funcLineStartPattern.matcher(line);
-		Matcher varLineStart = Regex.varLinePattern.matcher(line);
-		if (funcLineStart.matches()) {
-			this.funcs.add(lineToFuncObj(line));
-		} else if (varLineStart.matches()) {
-			this.variables.addAll(lineToVarObj(line));
+		Matcher emptyLine = Regex.EMPTY_LINE_PATTERN.matcher(line);
+		if (emptyLine.matches()) return; //empty line
+		if (line.startsWith("//")) return; // comment
+
+		line = line.replaceFirst("\\s*", "");
+		String[] words = line.split("\\s+");
+		Matcher varDec = Regex.VarDecStart.matcher(line);
+		Matcher methodDec = Regex.funcLineStartPattern.matcher(line);
+		if (varDec.lookingAt()) { // variable decleration line
+			this.variables.addAll(declarationLineToVarObj(line));
+		} else if (methodDec.lookingAt()) { // method decleration line
+			FunctionWrapper wrapper = lineToFuncObj(line);
+			FunctionDefBlock functionDefBlock = new FunctionDefBlock(wrapper,this);
+			this.funcs.add(functionDefBlock);
+		} else if (getVariableIfExists(words[0]) != null) { //assign value to already initialized variable
+			assignmentLineHandle(line);
+		} else { //all other options were checked so the line is illegal
+			throw new IllegalLineException(ERROR_START + runner.getLineNumber() +
+					", illegal line in main scope");
 		}
+
+
+//		Matcher funcLineStart = Regex.funcLineStartPattern.matcher(line);
+//		Matcher varLineStart = Regex.varLinePattern.matcher(line);
+//		if (funcLineStart.matches()) {
+//			this.funcs.add(lineToFuncObj(line));
+//		} else if (varLineStart.matches()) {
+//			this.variables.addAll(lineToVarObj(line));
+//		}
 
 	}
 
@@ -155,24 +180,30 @@ public class MasterBlock extends CodeBlock {
 
 	@Override
 	public void run() throws IllegalLineException {
-		String line = runner.getNextLine();
-		while (line != null) {
-			if (line.startsWith("//")){
-				line = runner.getNextLine();
-				continue;
-			}
-			line = line.replaceFirst("\\s*", "");
-			String[] words = line.split("\\s+");
-			Matcher startWithType = Regex.typePattern.matcher(line);
-			if (startWithType.lookingAt()) {
-				continue;
-			} else if (getVariableIfExists(words[0]) != null) {
-
-			} else if (words[0].equals("void")) {
-
-			}
+		getGlobalDataMembers();
+		for (FunctionDefBlock funcDef:funcs){
+			funcDef.run();
 		}
-		return;
+//		String line = runner.getNextLine();
+//		while (line != null) {
+//			Matcher emptyLine = Regex.EMPTY_LINE_PATTERN.matcher(line);
+//			if (emptyLine.matches()) continue; //empty line
+//			if (line.startsWith("//")) { // comment
+//				line = runner.getNextLine();
+//				continue;
+//			}
+//			line = line.replaceFirst("\\s*", "");
+//			String[] words = line.split("\\s+");
+//			Matcher startWithType = Regex.typePattern.matcher(line);
+//			if (startWithType.lookingAt()) { //decleration line, already did this
+//				continue;
+//			} else if (getVariableIfExists(words[0]) != null) {
+//
+//			} else if (words[0].equals("void")) {
+//
+//			}
+//		}
+//		return;
 	}
 
 //	private static String getVarName(String s) { TODO clean here at the end if needed.

@@ -23,7 +23,7 @@ public class MasterBlock extends CodeBlock {
 		return ourInstance;
 	}
 
-	private MasterBlock(){
+	private MasterBlock() {
 		super();
 		funcs = new ArrayList<FunctionWrapper>();
 		variables = new ArrayList<VariableWrapper>();
@@ -31,16 +31,31 @@ public class MasterBlock extends CodeBlock {
 
 	}
 
+	@Override
+	public void run() throws IllegalLineException {
+		//TODO implement
+
+	}
+
+	private void checkLineForFunc(String line) {
+		Matcher funcDecM = Regex.funcLineStartPattern.matcher(line);
+		if (funcDecM.matches()) {
+			//TODO implement
+		}
+	}
+
+
 	public ArrayList<FunctionWrapper> getFuncs() {
 		return funcs;
 	}
 
 	/**
 	 * sets the lines if the master block.
+	 *
 	 * @param lines array of lines.
 	 */
-	public void setLines(String[] lines){
-		this.lines =  lines;
+	public void setLines(String[] lines) {
+		this.lines = lines;
 		runner.setLines(lines);
 	}
 
@@ -48,6 +63,7 @@ public class MasterBlock extends CodeBlock {
 
 	/**
 	 * Initiliazes the the functions and global variables of the master block.
+	 *
 	 * @throws IllegalLineException If
 	 */
 	public void getGlobalDataMembers()
@@ -94,7 +110,7 @@ public class MasterBlock extends CodeBlock {
 	 */
 	private static FunctionWrapper lineToFuncObj(String line) throws IllegalLineException {
 		Matcher format = Regex.FUNCTION_TEMPLATE.matcher(line);
-		if (!format.matches()){
+		if (!format.matches()) {
 			throw new IllegalLineException(ERROR_START + runner.GetLineNumber() + FUNC_DEC_ERROR);
 		}
 		Matcher typesMatcher = Regex.typePattern.matcher(line);
@@ -115,7 +131,6 @@ public class MasterBlock extends CodeBlock {
 		String funcName = line.substring(name.start(), name.end());
 		return new FunctionWrapper(params, funcName);
 	}
-
 
 
 	private static int initParams(String line, Matcher typesMatcher, ArrayList<VariableWrapper> params, String typesAndVal, int i) {

@@ -53,6 +53,11 @@ public abstract class CodeBlock {
 		while (!BLOCK_END_MATCHER.matches()) {
 			CodeBlock nextBlock = null;
 
+			if (line.startsWith("//")){
+				line = runner.GetNextLine();
+				continue;
+			}
+
 			//TODO check if variable declaration (aka int x = 3), check that it's not in this scope variables(can be in others)
 
 			//TODO check if variable assigment (aka x = 3)
@@ -66,6 +71,7 @@ public abstract class CodeBlock {
 			if (nextBlock != null) {
 				nextBlock.run();
 			}
+			line = runner.GetNextLine();
 		}
 	}
 
@@ -160,6 +166,10 @@ public abstract class CodeBlock {
 		return null;
 	}
 
+	/**
+	 * @param line an string of a line
+	 * @return a string contains only the brackets and its contents.
+	 */
 	protected static String getBracketsString(String line) {
 		Matcher bracketsM = Regex.bracketsPattern.matcher(line);
 		boolean j = bracketsM.find(); // always true
@@ -168,7 +178,6 @@ public abstract class CodeBlock {
 	}
 
 	/**
-	 *
 	 * @param line the line where the function call happens.
 	 * @return true if the call is legal, false otherwise.
 	 */
@@ -187,15 +196,12 @@ public abstract class CodeBlock {
 		String[] params = brackets.split("\\s*,\\s*");
 		params[0] = params[0].replaceAll("\\s+","");
 		params[params.length-1] = params[params.length-1].replaceAll("\\s+","");
-
 		if (params.length != funcActualParams.size()){
 			return false;
 		}
-
 		for (int i = 0; i <params.length; i++) {
 			VariableWrapper variableIfExists = getVariableIfExists(params[i]);
 			VariableWrapper.Types wantedType = funcActualParams.get(i).getType();
-
 			if (variableIfExists != null && !(variableIfExists.getType() == wantedType)){
 					return false;
 			}
@@ -244,6 +250,5 @@ public abstract class CodeBlock {
 		if (this.parent == null) return null;
 		return parent.getVariableIfExists(name);
 	}
-
 
 }

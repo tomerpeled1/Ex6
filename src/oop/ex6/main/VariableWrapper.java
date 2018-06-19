@@ -16,10 +16,11 @@ public class VariableWrapper {
 	 * @param hasValue A boolean indicates if the variable has a value or not.
 	 * @param name The name of the variable.
 	 */
-	public VariableWrapper (String type, boolean hasValue, String name) {
+	public VariableWrapper (String type, boolean hasValue, String name,boolean isFinal) {
 		this.hasValue = hasValue;
 		this.type = stringToTypes(type);
 		this.name = name;
+		this.isFinal = isFinal;
 	}
 
 	/**

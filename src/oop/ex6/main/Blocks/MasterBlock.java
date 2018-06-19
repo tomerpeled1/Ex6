@@ -27,7 +27,7 @@ public class MasterBlock extends CodeBlock {
 		super();
 		funcs = new ArrayList<FunctionWrapper>();
 		variables = new ArrayList<VariableWrapper>();
-		runner = new LinesRunner(lines);
+		runner = null;
 
 	}
 

@@ -68,9 +68,63 @@ public abstract class CodeBlock {
 		}
 	}
 
-	protected VariableWrapper assignmentLineToVarObj(String line) throws IllegalLineException {
-		line = line.replaceAll("\\s", "");
+	/**
+	 * Checks if there's a need to handle an assignment.
+	 * @param line The line of the assignment to check.
+	 * @return True if it was an assignment, false otherwise.
+	 * @throws IllegalLineException If the assignment line was wrong.
+	 */
+	protected boolean assignmentLineHandle(String line) throws IllegalLineException {
+		line = line.replaceAll("\\s|;", "");
+		if (line.indexOf("=") <= 0) {
+			return false;
+		}
+		String[] varComponents = line.split("=");
+		VariableWrapper var = getVariableIfExists(varComponents[0]);
+		if (var.isFinal()) {
+			throw new IllegalLineException("error in line " + runner.getLineNumber() + ", final variables"
+					+ " must be assigned at declaration");
+		}
+		if (legalAssignment(line, varComponents, false, var.getType())) {
+			var.setHasValue(true);
+		}
+		return true;
+	}
 
+	/**
+	 * Checks if an assignment(or declaration) of variable is legal.
+	 * @param var The variable assignment.
+	 * @param varComponents The components of the assignment.
+	 * @param isFinal A boolean indicating if the variable is final or not.
+	 * @param type The type of the variable.
+	 * @return True if it's a legal assignment, false if it's not an assignment but a declaration.
+	 * @throws IllegalLineException Whenever the assignment/declaration is not legal.
+	 */
+	private boolean legalAssignment(String var, String[] varComponents, boolean isFinal, VariableWrapper.Types type)
+			throws IllegalLineException {
+		if (var.indexOf('=') < 0 && isFinal) {
+			throw new IllegalLineException("error in line " + runner.getLineNumber() + ", final " +
+					"variables must be assigned at declaration");
+		}
+		if (var.indexOf('=') >= 0 && varComponents.length == 1) {
+			throw new IllegalLineException("error in line " + runner.getLineNumber() + ", no given value.");
+		}
+		if (varComponents.length > 2) {
+			throw new IllegalLineException("error in line " + runner.getLineNumber());
+		}
+		Matcher m = Regex.varNamePattern.matcher(varComponents[0]);
+		if (!m.matches() || checkIfBlockVariable(varComponents[0])) {
+			throw new IllegalLineException("error in line " + runner.getLineNumber() +
+					", can't initialize variable.");
+		}
+		if(varComponents.length == 2) {
+			if (!checkIfValueMatchType(type, varComponents[1])) {
+				throw new IllegalLineException("error in line " + runner.getLineNumber() +
+						", value doesn't match type.");
+			}
+			return true;
+		}
+		return false; //means varComponents length is one, not assignment, only declaration.
 	}
 
 	/**
@@ -96,26 +150,7 @@ public abstract class CodeBlock {
 		for (String var : split) {
 			var = var.replaceAll("\\s", "");
 			String[] varComponents = var.split("=");
-			if (var.indexOf('=') < 0 && isFinal){
-				throw new IllegalLineException("error in line " + runner.getLineNumber() + ", final " +
-						"variables must be assigned at declaration");
-			}
-			if (var.indexOf('=') >= 0 && varComponents.length == 1) {
-				throw new IllegalLineException("error in line " + runner.getLineNumber() + ", no given value.");
-			}
-			if (varComponents.length > 2) {
-				throw new IllegalLineException("error in line " + runner.getLineNumber());
-			}
-			Matcher m = Regex.varNamePattern.matcher(varComponents[0]);
-			if (!m.matches() || checkIfBlockVariable(varComponents[0])) {
-				throw new IllegalLineException("error in line " + runner.getLineNumber() +
-												", can't initialize variable.");
-			}
-			if (varComponents.length == 2) {
-				if (!checkIfValueMatchType(VariableWrapper.stringToTypes(type), varComponents[1])) {
-					throw new IllegalLineException("error in line " + runner.getLineNumber() +
-							", value doesn't match type.");
-				}
+			if (legalAssignment(var, varComponents, isFinal, VariableWrapper.stringToTypes(type))) {
 				newVariables.add(new VariableWrapper(type, true, varComponents[0],isFinal));
 			} else {
 				newVariables.add(new VariableWrapper(type, false, varComponents[0],false));

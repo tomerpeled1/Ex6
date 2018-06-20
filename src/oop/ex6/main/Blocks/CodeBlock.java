@@ -38,35 +38,11 @@ public abstract class CodeBlock {
 		//setMaster();
 	}
 
-
-	public void run() throws IllegalLineException {
-		String line = runner.getNextLine();
-		Matcher BLOCK_END_MATCHER = Regex.BLOCK_END_PATTERN.matcher(line);
-		while (!BLOCK_END_MATCHER.matches()) {
-			CodeBlock nextBlock = null;
-			if (line.startsWith("//")){
-				line = runner.getNextLine();
-				continue;
-			}
-
-			//TODO when checking the end, get the next line, save it, call the function check end and than run on the next line.
-
-			//TODO check if variable declaration (aka int x = 3), check that it's not in this scope variables(can be in others)
-
-			//TODO check if variable assigment (aka x = 3)
-
-			//TODO check a call to a fucntion, check if function is in the fnctions list and check paramenters
-
-			//TODO check if a declaration of functoin only in master block and than run on it.
-			if (checkIfValidBooleanExpression(line)) {
-				nextBlock = new BooleanExpressionBlock(this);
-			}
-			if (nextBlock != null) {
-				nextBlock.run();
-			}
-			line = runner.getNextLine();
-		}
-	}
+	/**
+	 * Runs on the lines of the blcok.
+	 * @throws IllegalLineException When encountering with an illegal line.
+	 */
+	public abstract void run() throws IllegalLineException;
 
 	/**
 	 * Checks if there's a need to handle an assignment.
@@ -142,7 +118,7 @@ public abstract class CodeBlock {
 		line = line.replaceFirst(Regex.variableTypeCheck, "");
 		boolean isFinal = false;
 		Matcher finalM = Regex.FINAL_PATTERN.matcher(line);
-		if (finalM.lookingAt()){
+		if (finalM.lookingAt()) {
 			line = line.replaceFirst(Regex.FINAL_DEC, "");
 			isFinal = true;
 		}
@@ -151,44 +127,13 @@ public abstract class CodeBlock {
 			var = var.replaceAll("\\s", "");
 			String[] varComponents = var.split("=");
 			if (legalAssignment(var, varComponents, isFinal, VariableWrapper.stringToTypes(type))) {
-				newVariables.add(new VariableWrapper(type, true, varComponents[0],isFinal));
+				newVariables.add(new VariableWrapper(type, true, varComponents[0], isFinal));
 			} else {
-				newVariables.add(new VariableWrapper(type, false, varComponents[0],false));
+				newVariables.add(new VariableWrapper(type, false, varComponents[0], false));
 			}
 		}
 		return newVariables;//if it has no variables in it, it's ok.
 	}
-
-	/**
-	 * Checks if a line opens a new if or while block.
-	 *
-	 * @param line The line to check if a opens a block.
-	 * @return True if a valid boolean expression, otherwise false.
-	 */
-	private boolean checkIfValidBooleanExpression(String line) throws IllegalLineException {
-		Matcher ifMatcher = Regex.IF_PATTERN.matcher(line);
-		Matcher whileMatcher = Regex.WHILE_PATTERN.matcher(line);
-		String booleanExpression = null;
-		int expressionStart = 0;
-		int expressionEnd = 0;
-		if (ifMatcher.matches() || whileMatcher.matches()) {
-			expressionStart = line.indexOf('(');
-			expressionEnd = line.indexOf(')');
-			booleanExpression = line.substring(expressionStart, expressionEnd);
-			String[] splitExpression = booleanExpression.split(Regex.BOOLEAN_EXPRESSION_SPLIT);
-			for (String exp : splitExpression) {
-				Matcher doubleMatch = Regex.DOUBLE_PATTERN.matcher(exp);
-				if (!(exp.equals("true") || exp.equals("false") || doubleMatch.matches() ||
-						checkIfInitializedVariable(exp))) {
-					throw new IllegalLineException("error in line " + runner.getLineNumber() + ", boolean " +
-							"expression not supported.");
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
 
 	//variable checks.
 	private boolean checkIfBlockVariable(String name){

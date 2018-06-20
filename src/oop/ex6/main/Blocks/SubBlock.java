@@ -4,6 +4,7 @@ import oop.ex6.main.IllegalLineException;
 import oop.ex6.main.Regex;
 
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * this class represents a block which is not the main block - a function decleretion of if/while block.
@@ -32,14 +33,9 @@ public abstract class SubBlock extends CodeBlock {
             Matcher varDec = Regex.VarDecStart.matcher(line);
             if (varDec.lookingAt()) { // variable declaration line
                 this.variables.addAll(declarationLineToVarObj(line));
-            } else if (
-
-            //TODO check if variable assigment (aka x = 3)
-
-            //TODO check a call to a fucntion, check if function is in the fnctions list and check paramenters
-
-            //TODO check if a declaration of functoin only in master block and than run on it.
-            if (checkIfValidBooleanExpression(line)) {
+            } else if (isCallToFunction(line)) {
+                isFuncCallLegal(line);
+            } else if (!assignmentLineHandle(line) && checkIfValidBooleanExpression(line)) {
                 nextBlock = new BooleanExpressionBlock(this);
             }
             if (nextBlock != null) {
@@ -50,7 +46,15 @@ public abstract class SubBlock extends CodeBlock {
     }
 
     private boolean isCallToFunction(String line) {
-        //TODO check if matches a regex with a name of a function.
+        for (FunctionDefBlock func : master.getFuncs()) {
+            String regex = "\\s*" + func.getFuncName() + "\\s*(.*)\\s*;\\s*";
+            if (Pattern.compile(regex).matcher(line).matches()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Checks if a line opens a new if or while block.

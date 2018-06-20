@@ -19,18 +19,20 @@ public abstract class SubBlock extends CodeBlock {
 
     @Override
     public void run() throws IllegalLineException {
-        String line = runner.getNextLine();
-        Matcher BLOCK_END_MATCHER = Regex.BLOCK_END_PATTERN.matcher(line);
-        while (!BLOCK_END_MATCHER.matches()) {
+        String line = null;
+        String nextLine = runner.getNextLine();
+        //problem with while, and matcher, if i get the
+        while (checkEnd(line, nextLine)) {
+            line = nextLine;
             CodeBlock nextBlock = null;
             if (line.startsWith("//")){
-                line = runner.getNextLine();
+                nextLine = runner.getNextLine();
                 continue;
             }
-
-            //TODO when checking the end, get the next line, save it, call the function check end and than run on the next line.
-
-            //TODO check if variable declaration (aka int x = 3), check that it's not in this scope variables(can be in others)
+            Matcher varDec = Regex.VarDecStart.matcher(line);
+            if (varDec.lookingAt()) { // variable declaration line
+                this.variables.addAll(declarationLineToVarObj(line));
+            } else if (
 
             //TODO check if variable assigment (aka x = 3)
 
@@ -43,9 +45,12 @@ public abstract class SubBlock extends CodeBlock {
             if (nextBlock != null) {
                 nextBlock.run();
             }
-            line = runner.getNextLine();
+            nextLine = runner.getNextLine();
         }
     }
+
+    private boolean isCallToFunction(String line) {
+        //TODO check if matches a regex with a name of a function.
 
     /**
      * Checks if a line opens a new if or while block.

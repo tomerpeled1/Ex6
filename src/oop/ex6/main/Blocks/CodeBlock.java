@@ -182,14 +182,14 @@ public abstract class CodeBlock {
 	 * @param line The current line in the file.
 	 * @return The function wrapper for the line, otherwise null.
 	 */
-	private FunctionWrapper getFuncWrapperObj(String line) {
+	private FunctionDefBlock getFuncDefBlockObj(String line) {
 		Matcher m = Regex.funcNamePattern.matcher(line);
 		if (m.find()) {
 			String name = line.substring(m.start(), m.end());
 			System.out.println(master);
-			for (FunctionWrapper func : master.getFuncs()) { // check if the function being called name
+			for (FunctionDefBlock func : master.getFuncs()) { // check if the function being called name
 				// is a name of a known function.
-				if (name.equals(func.getName())) {
+				if (name.equals(func.getFuncName())) {
 					return func;
 				}
 			}
@@ -213,7 +213,7 @@ public abstract class CodeBlock {
 	 * @return true if the call is legal, false otherwise.
 	 */
 	protected boolean isFuncCallLegal(String line) {
-		FunctionWrapper funcObj = getFuncWrapperObj(line);
+		FunctionDefBlock funcObj = getFuncDefBlockObj(line);
 		if (funcObj == null) {
 			return false;
 		}
@@ -234,7 +234,7 @@ public abstract class CodeBlock {
 			VariableWrapper variableIfExists = getVariableIfExists(params[i]);
 			VariableWrapper.Types wantedType = funcActualParams.get(i).getType();
 			if (variableIfExists != null && !(variableIfExists.getType() == wantedType)){
-					return false;
+				return false;
 			}
 			if (!checkIfValueMatchType(wantedType, params[i])) {
 				return false;

@@ -86,9 +86,9 @@ public class MasterBlock extends CodeBlock {
 		String[] words = line.split("\\s+");
 		Matcher varDec = Regex.VarDecStart.matcher(line);
 		Matcher methodDec = Regex.funcLineStartPattern.matcher(line);
-		if (varDec.lookingAt()) { // variable decleration line
+		if (varDec.lookingAt()) { // variable declaration line
 			this.variables.addAll(declarationLineToVarObj(line));
-		} else if (methodDec.lookingAt()) { // method decleration line
+		} else if (methodDec.lookingAt()) { // method declaration line
 			FunctionWrapper wrapper = lineToFuncObj(line);
 			FunctionDefBlock functionDefBlock = new FunctionDefBlock(wrapper,this);
 			this.funcs.add(functionDefBlock);

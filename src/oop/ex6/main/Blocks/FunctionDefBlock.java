@@ -23,4 +23,21 @@ public class FunctionDefBlock extends SubBlock {
         }
         return Regex.BLOCK_END_PATTERN.matcher(nextLine).matches();
     }
+
+    /**
+     * Gets the name of the function.
+     * @return The name of the function.
+     */
+    public String getFuncName() {
+        return wrapper.getName();
+    }
+
+    /**
+     * Gets the parameters of the function
+     * @return An ArrayList that contains all the parameters of the function.
+     */
+    public ArrayList<VariableWrapper> getParams() {
+        return wrapper.getParams();
+    }
+
 }

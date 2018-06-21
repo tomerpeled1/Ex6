@@ -1,4 +1,4 @@
-22:07:40
+00:06:38
 
 school solution#User solution#result#Test name
 
@@ -58,8 +58,8 @@ school solution#User solution#result#Test name
 1		1		passed		\BaraksTests\methods\28.sjava		
 0		0		passed		\BaraksTests\methods\29.sjava		
 1		1		passed		\BaraksTests\methods\31.sjava		
-0		1		failed		\BaraksTests\methods\32.sjava		##################################
-0		1		failed		\BaraksTests\methods\33.sjava		##################################
+0		0		passed		\BaraksTests\methods\32.sjava		
+0		0		passed		\BaraksTests\methods\33.sjava		
 0		0		passed		\BaraksTests\methods\34.sjava		
 1		1		passed		\BaraksTests\methods\35.sjava		
 1		1		passed		\BaraksTests\methods\37.sjava		
@@ -350,7 +350,7 @@ school solution#User solution#result#Test name
 1		1		passed		\SchoolTests\test252.sjava		
 0		0		passed		\SchoolTests\test253.sjava		
 1		1		passed		\SchoolTests\test254.sjava		
-0		1		failed		\SchoolTests\test255.sjava		##################################
+0		0		passed		\SchoolTests\test255.sjava		
 1		1		passed		\SchoolTests\test257.sjava		
 1		1		passed		\SchoolTests\test261.sjava		
 1		1		passed		\SchoolTests\test262.sjava		
@@ -500,5 +500,5 @@ java.lang.NullPointerException
 1		1		passed		\SchoolTests\test504.sjava		
 0		1		failed		\SchoolTests\test505.sjava		##################################
 
-passed 416 out of 459 tests.
+passed 419 out of 459 tests.
 

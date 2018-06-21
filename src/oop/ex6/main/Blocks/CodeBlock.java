@@ -234,7 +234,7 @@ public abstract class CodeBlock {
 		String brackets = line.substring(bracketsM.start() + 1, bracketsM.end() - 1);
 		ArrayList<VariableWrapper> funcActualParams = funcObj.getParams();
 		if (brackets.equals("")) {
-			return funcActualParams == null;
+			return funcActualParams.isEmpty();
 		}
 		String[] params = brackets.split("\\s*,\\s*");
 		params[0] = params[0].replaceAll("\\s+", "");

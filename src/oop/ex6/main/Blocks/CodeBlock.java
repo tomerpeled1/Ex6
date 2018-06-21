@@ -263,6 +263,11 @@ public abstract class CodeBlock {
 	 */
 	private boolean checkIfValueMatchType(VariableWrapper.Types wantedType, String param) {
 		Matcher m;
+		VariableWrapper var = getVariableIfExists(param);
+		if (var!= null && var.getHasValue()){
+			VariableWrapper.Types varType = var.getType();
+			return wantedType == varType;
+		}
 		switch (wantedType) {
 			case INT:
 				m = Regex.INT_PATTERN.matcher(param);

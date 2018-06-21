@@ -43,7 +43,9 @@ public abstract class SubBlock extends CodeBlock {
 			if (varDec.matches()) { // variable declaration line
 				this.variables.addAll(declarationLineToVarObj(line,curLineNum));
 			} else if (isCallToFunction(line)) {
-				isFuncCallLegal(line);
+				if (!isFuncCallLegal(line)) {
+					throw new IllegalLineException(ERROR_START + curLineNum + ", illegal call to function.");
+				}
 			} else if (!assignmentLineHandle(line,curLineNum) && checkIfValidBooleanExpression(line,curLineNum)) {
 				nextBlock = new BooleanExpressionBlock(this,curLineNum+1);
 			} else if (returnMatcher.matches()) {

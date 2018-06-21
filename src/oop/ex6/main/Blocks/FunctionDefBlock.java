@@ -7,17 +7,29 @@ import oop.ex6.main.VariableWrapper;
 
 import java.util.ArrayList;
 
+/**
+ * this class represents a scope of a function.
+ */
 public class FunctionDefBlock extends SubBlock {
 
     private FunctionWrapper wrapper;
 
-    public FunctionDefBlock (FunctionWrapper wrapper, MasterBlock parent, int start) {
-        super(parent,start);
+    /**
+     * initializes a new functionBlock object.
+     * @param wrapper the FunctionWrapper this block has, holds it's name and parameters.
+     * @param parent the block that contains this block directly will always be the master block.
+     * @param startLine the line in which the block starts.
+     */
+    public FunctionDefBlock (FunctionWrapper wrapper, MasterBlock parent, int startLine) {
+        super(parent,startLine);
         this.variables.addAll(wrapper.getParams());
         this.wrapper = wrapper;
         this.master = parent;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected boolean checkEnd(String line, String nextLine) {
         if (line == null){
             return false;

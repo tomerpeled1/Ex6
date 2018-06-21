@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class Regex {
 
-	public static final String DOUBLE_CHECK = "(([\\d]+[.]*[\\d]*)|([\\d]*[.]*[\\d]+))";
+	public static final String DOUBLE_CHECK = "((-?[\\d]+[.]*[\\d]*)|(-?[\\d]*[.]*[\\d]+))";
 	public static final Pattern DOUBLE_PATTERN = Pattern.compile(DOUBLE_CHECK);
 	public static final Pattern INT_PATTERN = Pattern.compile("[\\d]+");
 	public static final Pattern CHAR_PATTERN = Pattern.compile("'.'");

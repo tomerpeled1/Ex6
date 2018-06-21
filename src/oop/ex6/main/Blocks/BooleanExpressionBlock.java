@@ -2,8 +2,16 @@ package oop.ex6.main.Blocks;
 
 import oop.ex6.main.Regex;
 
+/**
+ * this class represents a block of if/while statement.
+ */
 public class BooleanExpressionBlock extends SubBlock {
 
+    /**
+     *
+     * @param parent
+     * @param start
+     */
     public BooleanExpressionBlock(CodeBlock parent, int start) {
         super(parent,start);
     }

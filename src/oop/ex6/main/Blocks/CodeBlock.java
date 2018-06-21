@@ -8,21 +8,31 @@ import oop.ex6.main.Regex;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
+/**
+ * this class represents a single block, scope of code - a global scope, function or if/while scope.
+ */
 public abstract class CodeBlock {
 
-	protected static final String OPEN_BLOCK_AT_END_ERROR = "Error - need to close all curly braces.";
-	protected static final String ERROR_START = "Error in line ";
-	protected static final String VAR_ERROR = " variable deceleration is done poorly.";
-	protected static final String FUNC_DEC_ERROR = " function deceleration is done poorly.";
-	protected static final String ILLEGAL_LINE_IN_MAIN_SCOPE = ", illegal line in main scope";
+	private static final String OPEN_BLOCK_AT_END_ERROR = "Error - need to close all curly braces.";
+	private static final String ERROR_START = "Error in line ";
+	private static final String VAR_ERROR = " variable deceleration is done poorly.";
+	private static final String FUNC_DEC_ERROR = " function deceleration is done poorly.";
+	private static final String ILLEGAL_LINE_IN_MAIN_SCOPE = ", illegal line in main scope";
+	private static final String FINAL_VARIABLE_ERROR = ", can't assign new value to final variable";
+	private static final String NO_GIVEN_VALUE_ERROR = ", no given value.";
+	private static final String CANT_INITIALIZE_VARIABLE = ", can't initialize variable.";
+	private static final String VALUE_TYPE_ERROR = ", value doesn't match type.";
 
 
 	protected ArrayList<VariableWrapper> variables;
 	private CodeBlock parent;
-//	protected static LinesRunner runner; //TODO delete if possible
+	//	protected static LinesRunner runner; //TODO delete if possible
 	protected MasterBlock master;
 
 
+	/**
+	 * initializes a new code block.
+	 */
 	protected CodeBlock() {
 		setMaster();
 	}
@@ -48,12 +58,14 @@ public abstract class CodeBlock {
 
 	/**
 	 * Runs on the lines of the blcok.
+	 *
 	 * @throws IllegalLineException When encountering with an illegal line.
 	 */
 	public abstract void run() throws IllegalLineException;
 
 	/**
 	 * Checks if there's a need to handle an assignment.
+	 *
 	 * @param line The line of the assignment to check.
 	 * @return True if it was an assignment, false otherwise.
 	 * @throws IllegalLineException If the assignment line was wrong.
@@ -66,12 +78,12 @@ public abstract class CodeBlock {
 		String[] varComponents = line.split("=");
 		VariableWrapper var = getVariableIfExists(varComponents[0]);
 		if (var == null) {
-			throw new IllegalLineException("error in line" + lineNum);
+			throw new IllegalLineException(ERROR_START + lineNum);
 		}
 		if (var.isFinal()) {
-			throw new IllegalLineException("error in line " + lineNum + ", can't assign new value to final variable");
+			throw new IllegalLineException(ERROR_START + lineNum + FINAL_VARIABLE_ERROR);
 		}
-		if (legalAssignment(line, varComponents, false, var.getType(),lineNum)) {
+		if (legalAssignment(line, varComponents, false, var.getType(), lineNum)) {
 			var.setHasValue(true);
 		}
 		return true;
@@ -79,35 +91,35 @@ public abstract class CodeBlock {
 
 	/**
 	 * Checks if an assignment(or declaration) of variable is legal.
-	 * @param var The variable assignment.
+	 *
+	 * @param var           The variable assignment.
 	 * @param varComponents The components of the assignment.
-	 * @param isFinal A boolean indicating if the variable is final or not.
-	 * @param type The type of the variable.
+	 * @param isFinal       A boolean indicating if the variable is final or not.
+	 * @param type          The type of the variable.
 	 * @return True if it's a legal assignment, false if it's not an assignment but a declaration.
 	 * @throws IllegalLineException Whenever the assignment/declaration is not legal.
 	 */
 	private boolean legalAssignment(String var, String[] varComponents, boolean isFinal,
-	                                VariableWrapper.Types type,int lineNum)
+	                                VariableWrapper.Types type, int lineNum)
 			throws IllegalLineException {
 		if (var.indexOf('=') < 0 && isFinal) {
-			throw new IllegalLineException("error in line " + lineNum + ", can't assign value to final " +
-					"variable");
+			throw new IllegalLineException(ERROR_START + lineNum + FINAL_VARIABLE_ERROR);
 		}
 		if (var.indexOf('=') >= 0 && varComponents.length == 1) {
-			throw new IllegalLineException("error in line " + lineNum + ", no given value.");
+			throw new IllegalLineException(ERROR_START + lineNum + NO_GIVEN_VALUE_ERROR);
 		}
 		if (varComponents.length > 2) {
-			throw new IllegalLineException("error in line " + lineNum);
+			throw new IllegalLineException(ERROR_START + lineNum);
 		}
 		Matcher m = Regex.varNamePattern.matcher(varComponents[0]);
 		if (!m.matches() || checkIfBlockVariable(varComponents[0])) {
-			throw new IllegalLineException("error in line " + lineNum +
-					", can't initialize variable.");
+			throw new IllegalLineException(ERROR_START + lineNum +
+					CANT_INITIALIZE_VARIABLE);
 		}
-		if(varComponents.length == 2) {
+		if (varComponents.length == 2) {
 			if (!checkIfValueMatchType(type, varComponents[1])) {
-				throw new IllegalLineException("error in line " + lineNum +
-						", value doesn't match type.");
+				throw new IllegalLineException(ERROR_START + lineNum +
+						VALUE_TYPE_ERROR);
 			}
 			return true;
 		}
@@ -115,13 +127,13 @@ public abstract class CodeBlock {
 	}
 
 
-
 	/**
 	 * Gets a declaration line and returns the wrappers for the declared variables.
+	 *
 	 * @param line The declaration line for creating variables objects.
 	 * @return An ArrayList of VariableWrapper.
 	 */
-	protected ArrayList<VariableWrapper> declarationLineToVarObj(String line,int lineNum) throws IllegalLineException {
+	protected ArrayList<VariableWrapper> declarationLineToVarObj(String line, int lineNum) throws IllegalLineException {
 		Matcher typeNameMatcher = Regex.typePattern.matcher(line);
 		String type = "";
 		if (typeNameMatcher.find()) {
@@ -139,7 +151,7 @@ public abstract class CodeBlock {
 		for (String var : split) {
 			var = var.replaceAll("\\s", "");
 			String[] varComponents = var.split("=");
-			if (legalAssignment(var, varComponents, isFinal, VariableWrapper.stringToTypes(type),lineNum)) {
+			if (legalAssignment(var, varComponents, isFinal, VariableWrapper.stringToTypes(type), lineNum)) {
 				newVariables.add(new VariableWrapper(type, true, varComponents[0], isFinal));
 			} else {
 				newVariables.add(new VariableWrapper(type, false, varComponents[0], false));
@@ -149,14 +161,14 @@ public abstract class CodeBlock {
 	}
 
 	//variable checks.
-	private boolean checkIfBlockVariable(String name){
-			for (VariableWrapper var : variables) {
-				if (var.getName().equals(name)) {
-					return true;
-				}
+	private boolean checkIfBlockVariable(String name) {
+		for (VariableWrapper var : variables) {
+			if (var.getName().equals(name)) {
+				return true;
 			}
-			return false;
 		}
+		return false;
+	}
 
 	/**
 	 * Checks if a variable is an initialized variable.
@@ -179,6 +191,7 @@ public abstract class CodeBlock {
 
 	/**
 	 * Gets the relevant function wrapper object from the list of functions.
+	 *
 	 * @param line The current line in the file.
 	 * @return The function wrapper for the line, otherwise null.
 	 */
@@ -218,21 +231,21 @@ public abstract class CodeBlock {
 		}
 		Matcher bracketsM = Regex.bracketsPattern.matcher(line);
 		boolean j = bracketsM.find();
-		String brackets = line.substring(bracketsM.start()+1, bracketsM.end()-1);
+		String brackets = line.substring(bracketsM.start() + 1, bracketsM.end() - 1);
 		ArrayList<VariableWrapper> funcActualParams = funcObj.getParams();
-		if (brackets.equals("")){
+		if (brackets.equals("")) {
 			return funcActualParams == null;
 		}
 		String[] params = brackets.split("\\s*,\\s*");
-		params[0] = params[0].replaceAll("\\s+","");
-		params[params.length-1] = params[params.length-1].replaceAll("\\s+","");
-		if (params.length != funcActualParams.size()){
+		params[0] = params[0].replaceAll("\\s+", "");
+		params[params.length - 1] = params[params.length - 1].replaceAll("\\s+", "");
+		if (params.length != funcActualParams.size()) {
 			return false;
 		}
-		for (int i = 0; i <params.length; i++) {
+		for (int i = 0; i < params.length; i++) {
 			VariableWrapper variableIfExists = getVariableIfExists(params[i]);
 			VariableWrapper.Types wantedType = funcActualParams.get(i).getType();
-			if (variableIfExists != null && !(variableIfExists.getType() == wantedType)){
+			if (variableIfExists != null && !(variableIfExists.getType() == wantedType)) {
 				return false;
 			}
 			if (!checkIfValueMatchType(wantedType, params[i])) {
@@ -245,12 +258,12 @@ public abstract class CodeBlock {
 
 	/**
 	 * @param wantedType the type to fit to
-	 * @param param the wanted param to be checked
+	 * @param param      the wanted param to be checked
 	 * @return a matcher object for the param (a parameter that a function os called with) and the wanted type.
 	 */
 	private boolean checkIfValueMatchType(VariableWrapper.Types wantedType, String param) {
 		Matcher m;
-		switch (wantedType){
+		switch (wantedType) {
 			case INT:
 				m = Regex.INT_PATTERN.matcher(param);
 				return m.matches();
@@ -276,9 +289,9 @@ public abstract class CodeBlock {
 	 * @param name The name of the variable to check if is in the list.
 	 * @return The variable object if it's in the list, otherwise null.
 	 */
-	protected VariableWrapper getVariableIfExists(String name){
-		for (VariableWrapper var:this.variables){
-			if (var.getName().equals(name)){
+	protected VariableWrapper getVariableIfExists(String name) {
+		for (VariableWrapper var : this.variables) {
+			if (var.getName().equals(name)) {
 				return var;
 			}
 		}

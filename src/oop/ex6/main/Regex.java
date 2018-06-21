@@ -63,7 +63,7 @@ public class Regex {
 	public static final Pattern FINAL_PATTERN = Pattern.compile(FINAL_DEC);
 	public static final Pattern EMPTY_LINE_PATTERN = Pattern.compile("\\s*");
 	public static final Pattern OPEN_BLOCK_PATTERN = Pattern.compile(".*\\{\\s*");
-	public static final Pattern CLOSE_BLOCK_PATTERN = Pattern.compile("\\s*\\{\\s*");
+	public static final Pattern CLOSE_BLOCK_PATTERN = Pattern.compile("\\s*}\\s*");
 
 	public static final Pattern funcNamePattern = Pattern.compile(methodName);
 

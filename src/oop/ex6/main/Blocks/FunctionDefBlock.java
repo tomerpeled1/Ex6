@@ -15,6 +15,7 @@ public class FunctionDefBlock extends SubBlock {
         super(parent,start);
         this.variables.addAll(wrapper.getParams());
         this.wrapper = wrapper;
+        this.master = parent;
     }
 
     protected boolean checkEnd(String line, String nextLine) {

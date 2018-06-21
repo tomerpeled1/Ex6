@@ -43,7 +43,7 @@ public abstract class CodeBlock {
 	public CodeBlock(CodeBlock parent) {
 		this.parent = parent;
 		this.variables = new ArrayList<VariableWrapper>();
-		//setMaster();
+		setMaster();
 	}
 
 	/**

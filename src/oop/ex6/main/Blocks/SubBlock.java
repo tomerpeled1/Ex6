@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  */
 public abstract class SubBlock extends CodeBlock {
 
-	private MasterBlock master;
+	protected MasterBlock master;
 
 	private int startLineIndex;
 

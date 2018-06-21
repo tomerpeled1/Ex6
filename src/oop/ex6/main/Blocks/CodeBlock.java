@@ -13,11 +13,11 @@ import java.util.regex.Matcher;
  */
 public abstract class CodeBlock {
 
-	private static final String OPEN_BLOCK_AT_END_ERROR = "Error - need to close all curly braces.";
-	private static final String ERROR_START = "Error in line ";
+	protected static final String OPEN_BLOCK_AT_END_ERROR = "Error - need to close all curly braces.";
+	protected static final String ERROR_START = "Error in line ";
 	private static final String VAR_ERROR = " variable deceleration is done poorly.";
-	private static final String FUNC_DEC_ERROR = " function deceleration is done poorly.";
-	private static final String ILLEGAL_LINE_IN_MAIN_SCOPE = ", illegal line in main scope";
+	protected static final String FUNC_DEC_ERROR = " function deceleration is done poorly.";
+	protected static final String ILLEGAL_LINE_IN_MAIN_SCOPE = ", illegal line in main scope";
 	private static final String FINAL_VARIABLE_ERROR = ", can't assign new value to final variable";
 	private static final String NO_GIVEN_VALUE_ERROR = ", no given value.";
 	private static final String CANT_INITIALIZE_VARIABLE = ", can't initialize variable.";

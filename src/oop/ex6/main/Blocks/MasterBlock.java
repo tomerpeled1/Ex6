@@ -132,7 +132,7 @@ public class MasterBlock extends CodeBlock {
 		String[] typesAndVals = brackets.split(",");
 		int i = 0;
 		while (typesMatcher.find()) {
-			initParam(params, typesAndVals[i]);
+			initParam(params, typesAndVals[i],lineNum);
 			i++;
 		}
 		Matcher name = Regex.funcNamePattern.matcher(line);
@@ -160,19 +160,34 @@ public class MasterBlock extends CodeBlock {
 		for (int j = 0; j < temp.length; j++) {
 			temp[j] = temp[j].replaceAll("\\(|\\)", "");
 		}
+		boolean isFinal = false;
+		String name = null;
+		String type = null;
 		switch (temp.length) {
 			case 2:
-				if (checkIfNameTaken(temp[1])) {
-					throw new IllegalLineException(ERROR_START + lineNum + ": cant assign two " +
-							"variables in the same name");
-				}
-
-				params.add(new VariableWrapper(temp[0], true, temp[1], false));
+				isFinal = false;
+				name = temp[1];
+				type = temp[0];
+//				if (checkIfNameTaken(temp[1],params)) {
+//					throw new IllegalLineException(ERROR_START + lineNum + ": cant assign two " +
+//							"variables in the same name");
+//				}
+//				params.add(new VariableWrapper(temp[0], true, temp[1], false));
 				break;
 			case 3:
-				params.add(new VariableWrapper(temp[1], true, temp[2], true));
+				isFinal = true;
+				name = temp[2];
+				type = temp[1];
+//				params.add(new VariableWrapper(temp[1], true, temp[2], true));
 				break;
 		}
+		if (checkIfNameTaken(name,params)) {
+			throw new IllegalLineException(ERROR_START + lineNum + ": cant assign two " +
+					"variables in the same name");
+		}
+		params.add(new VariableWrapper(type, true, name, isFinal));
+
+
 
 //		String[] curValAndType = s.split("\\s+");
 //		String curParamName;
@@ -187,7 +202,13 @@ public class MasterBlock extends CodeBlock {
 //		return i;
 	}
 
-	private static boolean checkIfNameTaken(String s, ArrayList<) {
+	private static boolean checkIfNameTaken(String name, ArrayList<VariableWrapper> params) {
+		for (VariableWrapper p:params) {
+			if (p.getName().equals(name)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class MasterBlock extends CodeBlock {
 	private String[] lines;
 
 	public static MasterBlock getInstance() {
-		return ourInstance;
+		return new MasterBlock();
 	}
 
 	private MasterBlock() {

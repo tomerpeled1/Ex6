@@ -21,36 +21,39 @@ public class Sjavac {
 	/*
 	returns an array of all lines in file, as Strings
 	 */
-	private static String[] getLines(String path) throws IOException {
+	private static String[] getLinesFromPath(String path) throws IOException {
 		String[] lines;
 		Path path1 = Paths.get(path);
-		lines = (String[]) Files.readAllLines(path1).toArray();
+		lines = Files.readAllLines(path1).toArray(new String[0]);
 		return lines;
 	}
 
 
 	public static void main(String[] args){
 
-		if (args.length != 2){
+		if (args.length != 1){
 			System.err.println(ARGS_NUM_ERROR);
 			System.out.println(IO_ERROR_OUTPUT);
 			return;
 		}
 		String[] lines = null;
 		try {
-			lines = getLines(args[0]);
+			lines = getLinesFromPath(args[0]);
 		} catch (IOException e) {
 			System.err.println(IO_ERROR);
 			System.out.println(IO_ERROR_OUTPUT);
+			return;
 		}
 		MasterBlock master = MasterBlock.getInstance();
 		master.setLines(lines);
 		try {
 			master.run();
 			System.out.println(LEGAL_CODE_OUTPUT);
+			return;
 		} catch (IllegalLineException e) {
 			System.err.println(e.getMessage());
 			System.out.println(ILLEGAL_CODE_OUTPUT);
+			return;
 		}
 
 	}

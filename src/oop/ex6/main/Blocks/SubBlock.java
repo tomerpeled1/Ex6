@@ -37,7 +37,7 @@ public abstract class SubBlock extends CodeBlock {
 				nextLine = master.getLines()[curLineNum];
 				continue;
 			}
-			Matcher varDec = Regex.VarDecStart.matcher(line);
+			Matcher varDec = Regex.VarDec.matcher(line);
 			if (varDec.lookingAt()) { // variable declaration line
 				this.variables.addAll(declarationLineToVarObj(line,curLineNum));
 			} else if (isCallToFunction(line)) {

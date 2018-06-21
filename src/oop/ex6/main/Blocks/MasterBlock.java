@@ -88,9 +88,9 @@ public class MasterBlock extends CodeBlock {
 
 		line = line.replaceFirst("\\s*", "");
 		String[] words = line.split("\\s+");
-		Matcher varDec = Regex.VarDecStart.matcher(line);
+		Matcher varDec = Regex.VarDec.matcher(line);
 		Matcher methodDec = Regex.funcLineStartPattern.matcher(line);
-		if (varDec.lookingAt()) { // variable declaration line
+		if (varDec.matches()) { // variable declaration line
 			this.variables.addAll(declarationLineToVarObj(line,lineNum));
 		} else if (methodDec.lookingAt()) { // method declaration line
 			FunctionWrapper wrapper = lineToFuncObj(line,lineNum);

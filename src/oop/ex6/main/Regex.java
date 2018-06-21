@@ -52,7 +52,7 @@ public class Regex {
 	public static final Pattern WHILE_PATTERN = Pattern.compile("\\s*while\\s*\\(.+\\)\\s*\\{");
 
 	public static final Pattern typePattern = Pattern.compile(type);
-	public static final Pattern VarDecStart = Pattern.compile("\\s*((final)*\\s+" +type + ")|" + type);
+	public static final Pattern VarDec = Pattern.compile("(\\s*((final)?\\s+" + type + ")|" + type + ").*;\\s*");
 	public static final Pattern varNamePattern = Pattern.compile(varName);
 	public static final Pattern bracketsPattern = Pattern.compile("\\(.*\\)");
 	public static final Pattern funcLineStartPattern = Pattern.compile("\\s*void");

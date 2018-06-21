@@ -58,6 +58,7 @@ public abstract class SubBlock extends CodeBlock {
 				throw new IllegalLineException(ERROR_START + curLineNum + " no such operation");
 			}
 			if (nextBlock != null) {
+				line = null;
 				nextBlock.run();
 				curLineNum = nextBlock.endLineIndex;
 			}

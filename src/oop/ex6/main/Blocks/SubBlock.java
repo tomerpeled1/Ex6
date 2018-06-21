@@ -1,5 +1,6 @@
 package oop.ex6.main.Blocks;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import oop.ex6.main.IllegalLineException;
 import oop.ex6.main.Regex;
 
@@ -10,8 +11,6 @@ import java.util.regex.Pattern;
  * this class represents a block which is not the main block - a function decleretion of if/while block.
  */
 public abstract class SubBlock extends CodeBlock {
-
-	protected MasterBlock master;
 
 	private int startLineIndex;
 
@@ -31,14 +30,14 @@ public abstract class SubBlock extends CodeBlock {
 		//problem with while, and matcher, if i get the
 		while (!checkEnd(line, nextLine)) {
 			line = nextLine;
-			CodeBlock nextBlock = null;
+			SubBlock nextBlock = null;
 			if (line.startsWith("//")) {
 				curLineNum ++;
 				nextLine = master.getLines()[curLineNum];
 				continue;
 			}
 			Matcher varDec = Regex.VarDec.matcher(line);
-			if (varDec.lookingAt()) { // variable declaration line
+			if (varDec.matches()) { // variable declaration line
 				this.variables.addAll(declarationLineToVarObj(line,curLineNum));
 			} else if (isCallToFunction(line)) {
 				isFuncCallLegal(line);
@@ -50,8 +49,9 @@ public abstract class SubBlock extends CodeBlock {
 			}
 			if (nextBlock != null) {
 				nextBlock.run();
+				curLineNum = nextBlock.startLineIndex;
 			}
-			curLineNum ++;
+			curLineNum++;
 			nextLine = master.getLines()[curLineNum];
 		}
 	}
@@ -87,6 +87,7 @@ public abstract class SubBlock extends CodeBlock {
 			String[] splitExpression = booleanExpression.split(Regex.BOOLEAN_EXPRESSION_SPLIT);
 			for (String exp : splitExpression) {
 				Matcher doubleMatch = Regex.DOUBLE_PATTERN.matcher(exp);
+				exp = exp.replaceAll("\\s", "");
 				if (!(exp.equals("true") || exp.equals("false") || doubleMatch.matches() ||
 						checkIfInitializedVariable(exp))) {
 					throw new IllegalLineException("error in line " + lineNum + ", boolean " +

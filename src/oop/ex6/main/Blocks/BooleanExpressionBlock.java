@@ -9,6 +9,9 @@ public class BooleanExpressionBlock extends SubBlock {
     }
 
     protected boolean checkEnd(String line, String nextLine) {
+        if (line == null) {
+            return Regex.BLOCK_END_PATTERN.matcher(nextLine).matches();
+        }
         return Regex.BLOCK_END_PATTERN.matcher(line).matches();
     }
 }

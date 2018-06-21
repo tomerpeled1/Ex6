@@ -20,7 +20,7 @@ public abstract class CodeBlock {
 	protected ArrayList<VariableWrapper> variables;
 	private CodeBlock parent;
 //	protected static LinesRunner runner; //TODO delete if possible
-	private MasterBlock master;
+	protected MasterBlock master;
 
 
 	protected CodeBlock() {

@@ -124,7 +124,7 @@ public class MasterBlock extends CodeBlock {
 		}
 		Matcher typesMatcher = Regex.typePattern.matcher(line);
 		ArrayList<VariableWrapper> params = new ArrayList<VariableWrapper>();
-		Matcher paramName = Regex.varNamePattern.matcher(line);
+		Matcher paramName = Regex.varNamePattern.matcher(line); //TODO maybe can delete this
 		String brackets = getBracketsString(line);
 		if (brackets.matches(".*\\s*,\\s*\\)\\s*")) {
 			throw new IllegalLineException(ERROR_START + lineNum + FUNC_DEC_ERROR);
@@ -154,15 +154,19 @@ public class MasterBlock extends CodeBlock {
 	 * @param s      the string from which we want to create the Variable. will be in a format of a
 	 *               variable deceleration.
 	 */
-	private static void initParam(ArrayList<VariableWrapper> params, String s) {
+	private static void initParam(ArrayList<VariableWrapper> params, String s,int lineNum) throws IllegalLineException {
 
 		String[] temp = s.split("\\s+");
 		for (int j = 0; j < temp.length; j++) {
 			temp[j] = temp[j].replaceAll("\\(|\\)", "");
-
 		}
 		switch (temp.length) {
 			case 2:
+				if (checkIfNameTaken(temp[1])) {
+					throw new IllegalLineException(ERROR_START + lineNum + ": cant assign two " +
+							"variables in the same name");
+				}
+
 				params.add(new VariableWrapper(temp[0], true, temp[1], false));
 				break;
 			case 3:
@@ -181,6 +185,9 @@ public class MasterBlock extends CodeBlock {
 //		params.add(new VariableWrapper(line.substring(start, end), true, curParamName));
 //		i++;
 //		return i;
+	}
+
+	private static boolean checkIfNameTaken(String s, ArrayList<) {
 	}
 
 	@Override

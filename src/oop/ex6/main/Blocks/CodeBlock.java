@@ -165,28 +165,15 @@ public abstract class CodeBlock {
 	 * @param name The name of the variable to check.
 	 * @return True if it's initialized, false else.
 	 */
-	protected boolean checkIfInitializedVariable(String name) {
+	protected boolean InitiliazedIntOrDouble(String name) {
 		VariableWrapper var = getVariableIfExists(name);
 		if (var == null) {//not even in the list.
 			return false;
 		}
-		return var.getHasValue();
+		return var.getHasValue() &&
+				(var.getType() == VariableWrapper.Types.INT || var.getType() == VariableWrapper.Types.DOUBLE);
 	}
 
-	/**
-	 * Checks if a variable is an uninitialized variable.
-	 * !! can't check if initialized variable.
-	 *
-	 * @param name The name of the variable to check.
-	 * @return True if it's uninitialized, false else.
-	 */
-	protected boolean checkIfUninitializedVariable(String name) {
-		VariableWrapper var = getVariableIfExists(name);
-		if (var == null) {//not even in the list.
-			return false;
-		}
-		return !var.getHasValue();
-	}
 	//end of variable checks.
 
 

@@ -1,5 +1,315 @@
-16:19:54
+17:12:19
 
 school solution#User solution#result#Test name
 
-0		1		failed		\BaraksTests\if\01.sjava		##################################
+0		0		passed		\BaraksTests\if\01.sjava		
+1		1		passed		\BaraksTests\if\02.sjava		
+0		0		passed		\BaraksTests\if\03.sjava		
+0		0		passed		\BaraksTests\if\04.sjava		
+0		0		passed		\BaraksTests\if\05.sjava		
+0		0		passed		\BaraksTests\if\06.sjava		
+0		0		passed		\BaraksTests\if\07.sjava		
+0		1		failed		\BaraksTests\if\08.sjava		##################################
+0		1		failed		\BaraksTests\if\09.sjava		##################################
+0		1		failed		\BaraksTests\if\10.sjava		##################################
+0		0		passed		\BaraksTests\if\11.sjava		
+1		1		passed		\BaraksTests\if\12.sjava		
+1		1		passed		\BaraksTests\if\13.sjava		
+0		0		passed		\BaraksTests\if\14.sjava		
+1		1		passed		\BaraksTests\if\15.sjava		
+1		1		passed		\BaraksTests\if\16.sjava		
+1		1		passed		\BaraksTests\if\17.sjava		
+1		1		passed		\BaraksTests\if\18.sjava		
+1		1		passed		\BaraksTests\if\22.sjava		
+1		1		passed		\BaraksTests\if\23.sjava		
+1		1		passed		\BaraksTests\if\24.sjava		
+1		1		passed		\BaraksTests\if\25.sjava		
+1		1		passed		\BaraksTests\if\26.sjava		
+1		1		passed		\BaraksTests\if\27.sjava		
+1		1		passed		\BaraksTests\if\28.sjava		
+0		1		failed		\BaraksTests\if\29.sjava		##################################
+0		1		failed		\BaraksTests\if\30.sjava		##################################
+1		1		passed		\BaraksTests\if\31.sjava		
+0		0		passed		\BaraksTests\methods\01.sjava		
+1		1		passed		\BaraksTests\methods\02.sjava		
+0		0		passed		\BaraksTests\methods\03.sjava		
+0		0		passed		\BaraksTests\methods\04.sjava		
+0		0		passed		\BaraksTests\methods\06.sjava		
+0		0		passed		\BaraksTests\methods\07.sjava		
+1		0		failed		\BaraksTests\methods\08.sjava		##################################
+1		1		passed		\BaraksTests\methods\09.sjava		
+1		1		passed		\BaraksTests\methods\10.sjava		
+1		1		passed		\BaraksTests\methods\11.sjava		
+1		1		passed		\BaraksTests\methods\12.sjava		
+1		1		passed		\BaraksTests\methods\13.sjava		
+0		0		passed		\BaraksTests\methods\14.sjava		
+1		1		passed		\BaraksTests\methods\16.sjava		
+1		1		passed		\BaraksTests\methods\17.sjava		
+0		0		passed		\BaraksTests\methods\18.sjava		
+1		0		failed		\BaraksTests\methods\19.sjava		##################################
+1		0		failed		\BaraksTests\methods\20.sjava		##################################
+1		0		failed		\BaraksTests\methods\21.sjava		##################################
+1		0		failed		\BaraksTests\methods\22.sjava		##################################
+1		0		failed		\BaraksTests\methods\23.sjava		##################################
+1		0		failed		\BaraksTests\methods\24.sjava		##################################
+0		0		passed		\BaraksTests\methods\25.sjava		
+1		0		failed		\BaraksTests\methods\26.sjava		##################################
+0		0		passed		\BaraksTests\methods\27.sjava		
+1		1		passed		\BaraksTests\methods\28.sjava		
+0		1		failed		\BaraksTests\methods\29.sjava		##################################
+1		1		passed		\BaraksTests\methods\31.sjava		
+0		1		failed		\BaraksTests\methods\32.sjava		##################################
+
+while testing \BaraksTests\methods\33.sjava, Your program printed something that is not '1' or '0' or '2'.
+The prints were:
+
+java.lang.ArrayIndexOutOfBoundsException: 5
+	at oop.ex6.main.Blocks.SubBlock.run(SubBlock.java:31)
+	at oop.ex6.main.Blocks.MasterBlock.run(MasterBlock.java:190)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:50)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:302)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:207)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
+
+
+while testing \BaraksTests\methods\34.sjava, Your program printed something that is not '1' or '0' or '2'.
+The prints were:
+
+java.lang.ArrayIndexOutOfBoundsException: 5
+	at oop.ex6.main.Blocks.SubBlock.run(SubBlock.java:31)
+	at oop.ex6.main.Blocks.MasterBlock.run(MasterBlock.java:190)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:50)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:302)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:207)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
+
+1		1		passed		\BaraksTests\methods\35.sjava		
+1		1		passed		\BaraksTests\methods\37.sjava		
+
+while testing \BaraksTests\return\01.sjava, Your program printed something that is not '1' or '0' or '2'.
+The prints were:
+
+java.lang.ArrayIndexOutOfBoundsException: 5
+	at oop.ex6.main.Blocks.SubBlock.run(SubBlock.java:31)
+	at oop.ex6.main.Blocks.MasterBlock.run(MasterBlock.java:190)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:50)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:302)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:207)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
+
+
+while testing \BaraksTests\return\02.sjava, Your program printed something that is not '1' or '0' or '2'.
+The prints were:
+
+java.lang.ArrayIndexOutOfBoundsException: 5
+	at oop.ex6.main.Blocks.SubBlock.run(SubBlock.java:31)
+	at oop.ex6.main.Blocks.MasterBlock.run(MasterBlock.java:190)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:50)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:302)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:207)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
+
+1		1		passed		\BaraksTests\return\03.sjava		
+1		1		passed		\BaraksTests\return\04.sjava		
+1		1		passed		\BaraksTests\return\05.sjava		
+1		1		passed		\BaraksTests\return\06.sjava		
+0		1		failed		\BaraksTests\return\07.sjava		##################################
+0		1		failed		\BaraksTests\return\08.sjava		##################################
+0		1		failed		\BaraksTests\return\09.sjava		##################################
+1		1		passed		\BaraksTests\return\10.sjava		
+0		1		failed		\BaraksTests\return\11.sjava		##################################
+1		1		passed		\BaraksTests\return\12.sjava		
+1		1		passed		\BaraksTests\return\13.sjava		
+0		1		failed		\BaraksTests\return\14.sjava		##################################
+
+while testing \BaraksTests\structure\01.sjava, Your program printed something that is not '1' or '0' or '2'.
+The prints were:
+
+java.lang.ArrayIndexOutOfBoundsException: 2
+	at oop.ex6.main.Blocks.SubBlock.run(SubBlock.java:38)
+	at oop.ex6.main.Blocks.MasterBlock.run(MasterBlock.java:190)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:50)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:302)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:207)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
+
+1		1		passed		\BaraksTests\structure\02.sjava		
+1		1		passed		\BaraksTests\structure\03.sjava		
+
+while testing \BaraksTests\structure\04.sjava, Your program printed something that is not '1' or '0' or '2'.
+The prints were:
+
+java.lang.ArrayIndexOutOfBoundsException: 5
+	at oop.ex6.main.Blocks.SubBlock.run(SubBlock.java:38)
+	at oop.ex6.main.Blocks.MasterBlock.run(MasterBlock.java:190)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:50)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:302)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:207)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
+
+
+while testing \BaraksTests\structure\05.sjava, Your program printed something that is not '1' or '0' or '2'.
+The prints were:
+
+java.lang.ArrayIndexOutOfBoundsException: 4
+	at oop.ex6.main.Blocks.SubBlock.run(SubBlock.java:38)
+	at oop.ex6.main.Blocks.MasterBlock.run(MasterBlock.java:190)
+	at oop.ex6.main.Sjavac.main(Sjavac.java:50)
+	at Tester_ex6_oop.runTestWithOnUser(Tester_ex6_oop.java:302)
+	at Tester_ex6_oop.doOneTest(Tester_ex6_oop.java:207)
+	at Tester_ex6_oop.runAllTests(Tester_ex6_oop.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
+

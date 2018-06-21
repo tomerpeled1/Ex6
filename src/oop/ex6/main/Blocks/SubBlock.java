@@ -3,6 +3,7 @@ package oop.ex6.main.Blocks;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import oop.ex6.main.IllegalLineException;
 import oop.ex6.main.Regex;
+import oop.ex6.main.VariableWrapper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +14,7 @@ import java.util.regex.Pattern;
 public abstract class SubBlock extends CodeBlock {
 
 	private int startLineIndex;
+	private int endLineIndex;
 
 	public SubBlock(CodeBlock parent, int start) {
 		super(parent);
@@ -31,29 +33,38 @@ public abstract class SubBlock extends CodeBlock {
 		while (!checkEnd(line, nextLine)) {
 			line = nextLine;
 			SubBlock nextBlock = null;
-			if (line.startsWith("//")) {
-				curLineNum ++;
+			if (line.startsWith("//") || Regex.EMPTY_LINE_PATTERN.matcher(line).matches()) {
+				curLineNum++;
 				nextLine = master.getLines()[curLineNum];
 				continue;
 			}
 			Matcher varDec = Regex.VarDec.matcher(line);
+			Matcher returnMatcher = Regex.RETURN_PATTERN.matcher(line);
 			if (varDec.matches()) { // variable declaration line
 				this.variables.addAll(declarationLineToVarObj(line,curLineNum));
 			} else if (isCallToFunction(line)) {
 				isFuncCallLegal(line);
 			} else if (!assignmentLineHandle(line,curLineNum) && checkIfValidBooleanExpression(line,curLineNum)) {
 				nextBlock = new BooleanExpressionBlock(this,curLineNum+1);
+			} else if (returnMatcher.matches()) {
+				curLineNum++;
+				nextLine = master.getLines()[curLineNum];
+				if (checkEnd(line, nextLine)) {
+					return;
+				}
+				continue;
 			}
 			else {
 				throw new IllegalLineException(ERROR_START + curLineNum + " no such operation");
 			}
 			if (nextBlock != null) {
 				nextBlock.run();
-				curLineNum = nextBlock.startLineIndex;
+				curLineNum = nextBlock.endLineIndex;
 			}
 			curLineNum++;
 			nextLine = master.getLines()[curLineNum];
 		}
+		endLineIndex = curLineNum;
 	}
 
 
@@ -86,10 +97,10 @@ public abstract class SubBlock extends CodeBlock {
 			booleanExpression = line.substring(expressionStart+1, expressionEnd);
 			String[] splitExpression = booleanExpression.split(Regex.BOOLEAN_EXPRESSION_SPLIT);
 			for (String exp : splitExpression) {
-				Matcher doubleMatch = Regex.DOUBLE_PATTERN.matcher(exp);
 				exp = exp.replaceAll("\\s", "");
+				Matcher doubleMatch = Regex.DOUBLE_PATTERN.matcher(exp);
 				if (!(exp.equals("true") || exp.equals("false") || doubleMatch.matches() ||
-						checkIfInitializedVariable(exp))) {
+						InitiliazedIntOrDouble(exp))) {
 					throw new IllegalLineException("error in line " + lineNum + ", boolean " +
 							"expression not supported.");
 				}

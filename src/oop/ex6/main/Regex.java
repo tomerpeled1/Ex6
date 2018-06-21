@@ -41,7 +41,8 @@ public class Regex {
 	public static final Pattern stringDeclarationAssignment = Pattern.compile(varName + stringAssignment);
 	//end of assignments checks.
 
-	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("\\s*void\\s+" + methodName + "\\s*((\\(\\s*" +
+	public static final Pattern FUNCTION_TEMPLATE = Pattern.compile("\\s*void\\s+" + methodName +
+			"\\s*((\\(\\s*" +
 			"(\\s*((final)*\\s+)*" + type + "\\s+" + varName + "\\s*,\\s*)*" +
 			"(\\s*((final)*\\s+)*" + type + "\\s+" + varName + "\\s*)\\))|(\\(\\s*\\)))\\s*\\{\\s*");
 

@@ -9,12 +9,12 @@ import java.util.regex.Pattern;
 public class TestDvir {
     public static void main(String[] args) {
         String line = "String    =, y ;    ";
-        SubBlock x = new SubBlock(null);
-        try {
-        System.out.println(x.lineToVarObj(line));
-        }
-        catch(Exception e){
-            System.out.println("!");
-        }
+//        SubBlock x = new SubBlock(null);
+//        try {
+//        System.out.println(x.lineToVarObj(line));
+//        }
+//        catch(Exception e){
+//            System.out.println("!");
+//        }
     }
 }

@@ -11,13 +11,15 @@ import java.util.regex.Matcher;
 public class MasterBlock extends CodeBlock {
 
 
-	private static final String ERROR_START = "Error in line ";
-	private static final String VAR_ERROR = " variable deceleration is done poorly.";
-	private static final String FUNC_DEC_ERROR = " function deceleration is done poorly.";
-
 	private ArrayList<FunctionDefBlock> funcs;
 
 	private static MasterBlock ourInstance = new MasterBlock();
+
+
+	String[] getLines() {
+		return lines;
+	}
+
 	private String[] lines;
 
 	public static MasterBlock getInstance() {
@@ -28,7 +30,7 @@ public class MasterBlock extends CodeBlock {
 		super();
 		funcs = new ArrayList<FunctionDefBlock>();
 		variables = new ArrayList<VariableWrapper>();
-		runner = null;
+//		runner = null;
 
 	}
 
@@ -43,7 +45,7 @@ public class MasterBlock extends CodeBlock {
 	 */
 	public void setLines(String[] lines) {
 		this.lines = lines;
-		runner = new LinesRunner(lines);
+//		runner = new LinesRunner(lines);
 	}
 
 	//TODO
@@ -56,20 +58,21 @@ public class MasterBlock extends CodeBlock {
 	public void getGlobalDataMembers()
 			throws IllegalLineException {
 		int openBraces = 0;
-		String line = runner.getNextLine();
-		while (line != null) {
+		for (String line : lines) {
 			Matcher openScope = Regex.OPEN_BLOCK_PATTERN.matcher(line);
 			Matcher closeScope = Regex.CLOSE_BLOCK_PATTERN.matcher(line);
-
 			if (openBraces == 0) {
 				checkGlobalLine(line);
 			}
-			if (openScope.matches()) { //TODO fix this to regex with \\s*
+			if (openScope.matches()) {
 				openBraces += 1;
+
 			} else if (closeScope.matches()) {
 				openBraces -= 1;
 			}
-			line = runner.getNextLine();
+		}
+		if (openBraces!=0){
+			throw new IllegalLineException(OPEN_BLOCK_AT_END_ERROR);
 		}
 	}
 
@@ -78,6 +81,7 @@ public class MasterBlock extends CodeBlock {
 	 */
 	private void checkGlobalLine(String line) throws IllegalLineException {
 
+		int lineNum = java.util.Arrays.asList(lines).indexOf(line);
 		Matcher emptyLine = Regex.EMPTY_LINE_PATTERN.matcher(line);
 		if (emptyLine.matches()) return; //empty line
 		if (line.startsWith("//")) return; // comment
@@ -87,16 +91,16 @@ public class MasterBlock extends CodeBlock {
 		Matcher varDec = Regex.VarDecStart.matcher(line);
 		Matcher methodDec = Regex.funcLineStartPattern.matcher(line);
 		if (varDec.lookingAt()) { // variable declaration line
-			this.variables.addAll(declarationLineToVarObj(line));
+			this.variables.addAll(declarationLineToVarObj(line,lineNum));
 		} else if (methodDec.lookingAt()) { // method declaration line
-			FunctionWrapper wrapper = lineToFuncObj(line);
-			FunctionDefBlock functionDefBlock = new FunctionDefBlock(wrapper,this);
+			FunctionWrapper wrapper = lineToFuncObj(line,lineNum);
+			FunctionDefBlock functionDefBlock = new FunctionDefBlock(wrapper, this, lineNum);
 			this.funcs.add(functionDefBlock);
 		} else if (getVariableIfExists(words[0]) != null) { //assign value to already initialized variable
-			assignmentLineHandle(line);
+			assignmentLineHandle(line,lineNum);
 		} else { //all other options were checked so the line is illegal
-			throw new IllegalLineException(ERROR_START + runner.getLineNumber() +
-					", illegal line in main scope");
+			throw new IllegalLineException(ERROR_START + lineNum +
+					ILLEGAL_LINE_IN_MAIN_SCOPE);
 		}
 
 
@@ -113,17 +117,17 @@ public class MasterBlock extends CodeBlock {
 	/*
 	gets a line of a function deceleration, and returns a function wrapper object.
 	 */
-	private static FunctionWrapper lineToFuncObj(String line) throws IllegalLineException {
+	private static FunctionWrapper lineToFuncObj(String line, int lineNum) throws IllegalLineException {
 		Matcher format = Regex.FUNCTION_TEMPLATE.matcher(line);
 		if (!format.matches()) {
-			throw new IllegalLineException(ERROR_START + runner.getLineNumber() + FUNC_DEC_ERROR);
+			throw new IllegalLineException(ERROR_START + lineNum + FUNC_DEC_ERROR);
 		}
 		Matcher typesMatcher = Regex.typePattern.matcher(line);
 		ArrayList<VariableWrapper> params = new ArrayList<VariableWrapper>();
 		Matcher paramName = Regex.varNamePattern.matcher(line);
 		String brackets = getBracketsString(line);
 		if (brackets.matches(".*\\s*,\\s*\\)\\s*")) {
-			throw new IllegalLineException(ERROR_START + runner.getLineNumber() + FUNC_DEC_ERROR);
+			throw new IllegalLineException(ERROR_START + lineNum + FUNC_DEC_ERROR);
 		}
 		String[] typesAndVals = brackets.split(",");
 		int i = 0;
@@ -136,7 +140,7 @@ public class MasterBlock extends CodeBlock {
 		name.find(); //twice to skip "void".
 		String funcName = line.substring(name.start(), name.end());
 		if (funcName.equals("void")) {
-			throw new IllegalLineException("error in line " + runner.getLineNumber() +
+			throw new IllegalLineException("error in line " + lineNum+
 					", function can't be named void");
 		}
 		return new FunctionWrapper(params, funcName);
@@ -180,10 +184,11 @@ public class MasterBlock extends CodeBlock {
 
 	@Override
 	public void run() throws IllegalLineException {
-		getGlobalDataMembers();
-		for (FunctionDefBlock funcDef:funcs){
-			funcDef.run();
-		}
+			getGlobalDataMembers();
+			for (FunctionDefBlock funcDef : funcs) {
+				funcDef.run();
+			}
+
 //		String line = runner.getNextLine();
 //		while (line != null) {
 //			Matcher emptyLine = Regex.EMPTY_LINE_PATTERN.matcher(line);

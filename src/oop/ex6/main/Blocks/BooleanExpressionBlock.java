@@ -4,8 +4,8 @@ import oop.ex6.main.Regex;
 
 public class BooleanExpressionBlock extends SubBlock {
 
-    public BooleanExpressionBlock(CodeBlock parent) {
-        super(parent);
+    public BooleanExpressionBlock(CodeBlock parent, int start) {
+        super(parent,start);
     }
 
     protected boolean checkEnd(String line, String nextLine) {

@@ -9,9 +9,17 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public abstract class CodeBlock {
+
+	protected static final String OPEN_BLOCK_AT_END_ERROR = "Error - need to close all curly braces.";
+	protected static final String ERROR_START = "Error in line ";
+	protected static final String VAR_ERROR = " variable deceleration is done poorly.";
+	protected static final String FUNC_DEC_ERROR = " function deceleration is done poorly.";
+	protected static final String ILLEGAL_LINE_IN_MAIN_SCOPE = ", illegal line in main scope";
+
+
 	protected ArrayList<VariableWrapper> variables;
 	private CodeBlock parent;
-	protected static LinesRunner runner;
+//	protected static LinesRunner runner; //TODO delete if possible
 	private MasterBlock master;
 
 
@@ -50,7 +58,7 @@ public abstract class CodeBlock {
 	 * @return True if it was an assignment, false otherwise.
 	 * @throws IllegalLineException If the assignment line was wrong.
 	 */
-	protected boolean assignmentLineHandle(String line) throws IllegalLineException {
+	protected boolean assignmentLineHandle(String line, int lineNum) throws IllegalLineException {
 		line = line.replaceAll("\\s|;", "");
 		if (line.indexOf("=") <= 0) {
 			return false;
@@ -58,10 +66,10 @@ public abstract class CodeBlock {
 		String[] varComponents = line.split("=");
 		VariableWrapper var = getVariableIfExists(varComponents[0]);
 		if (var.isFinal()) {
-			throw new IllegalLineException("error in line " + runner.getLineNumber() + ", final variables"
+			throw new IllegalLineException("error in line " + lineNum+ ", final variables"
 					+ " must be assigned at declaration");
 		}
-		if (legalAssignment(line, varComponents, false, var.getType())) {
+		if (legalAssignment(line, varComponents, false, var.getType(),lineNum)) {
 			var.setHasValue(true);
 		}
 		return true;
@@ -76,26 +84,27 @@ public abstract class CodeBlock {
 	 * @return True if it's a legal assignment, false if it's not an assignment but a declaration.
 	 * @throws IllegalLineException Whenever the assignment/declaration is not legal.
 	 */
-	private boolean legalAssignment(String var, String[] varComponents, boolean isFinal, VariableWrapper.Types type)
+	private boolean legalAssignment(String var, String[] varComponents, boolean isFinal,
+	                                VariableWrapper.Types type,int lineNum)
 			throws IllegalLineException {
 		if (var.indexOf('=') < 0 && isFinal) {
-			throw new IllegalLineException("error in line " + runner.getLineNumber() + ", final " +
+			throw new IllegalLineException("error in line " + lineNum + ", final " +
 					"variables must be assigned at declaration");
 		}
 		if (var.indexOf('=') >= 0 && varComponents.length == 1) {
-			throw new IllegalLineException("error in line " + runner.getLineNumber() + ", no given value.");
+			throw new IllegalLineException("error in line " + lineNum + ", no given value.");
 		}
 		if (varComponents.length > 2) {
-			throw new IllegalLineException("error in line " + runner.getLineNumber());
+			throw new IllegalLineException("error in line " + lineNum);
 		}
 		Matcher m = Regex.varNamePattern.matcher(varComponents[0]);
 		if (!m.matches() || checkIfBlockVariable(varComponents[0])) {
-			throw new IllegalLineException("error in line " + runner.getLineNumber() +
+			throw new IllegalLineException("error in line " + lineNum +
 					", can't initialize variable.");
 		}
 		if(varComponents.length == 2) {
 			if (!checkIfValueMatchType(type, varComponents[1])) {
-				throw new IllegalLineException("error in line " + runner.getLineNumber() +
+				throw new IllegalLineException("error in line " + lineNum +
 						", value doesn't match type.");
 			}
 			return true;
@@ -103,12 +112,14 @@ public abstract class CodeBlock {
 		return false; //means varComponents length is one, not assignment, only declaration.
 	}
 
+
+
 	/**
 	 * Gets a declaration line and returns the wrappers for the declared variables.
 	 * @param line The declaration line for creating variables objects.
 	 * @return An ArrayList of VariableWrapper.
 	 */
-	protected ArrayList<VariableWrapper> declarationLineToVarObj(String line) throws IllegalLineException {
+	protected ArrayList<VariableWrapper> declarationLineToVarObj(String line,int lineNum) throws IllegalLineException {
 		Matcher typeNameMatcher = Regex.typePattern.matcher(line);
 		String type = "";
 		if (typeNameMatcher.find()) {
@@ -126,7 +137,7 @@ public abstract class CodeBlock {
 		for (String var : split) {
 			var = var.replaceAll("\\s", "");
 			String[] varComponents = var.split("=");
-			if (legalAssignment(var, varComponents, isFinal, VariableWrapper.stringToTypes(type))) {
+			if (legalAssignment(var, varComponents, isFinal, VariableWrapper.stringToTypes(type),lineNum)) {
 				newVariables.add(new VariableWrapper(type, true, varComponents[0], isFinal));
 			} else {
 				newVariables.add(new VariableWrapper(type, false, varComponents[0], false));

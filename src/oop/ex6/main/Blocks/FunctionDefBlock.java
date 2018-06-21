@@ -11,8 +11,8 @@ public class FunctionDefBlock extends SubBlock {
 
     private FunctionWrapper wrapper;
 
-    public FunctionDefBlock (FunctionWrapper wrapper, MasterBlock parent) {
-        super(parent);
+    public FunctionDefBlock (FunctionWrapper wrapper, MasterBlock parent, int start) {
+        super(parent,start);
         this.variables.addAll(wrapper.getParams());
         this.wrapper = wrapper;
     }

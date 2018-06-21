@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
 
 /**
  * the main class. it gets a sjava file name and checks if the file will be able to compile.
@@ -16,6 +14,9 @@ public class Sjavac {
 
 	private final static String IO_ERROR = "IO Error - problem with the file";
 	public static final String ARGS_NUM_ERROR = "The program should get exactly one argument.";
+	public static final int IO_ERROR_OUTPUT = 2;
+	public static final int LEGAL_CODE_OUTPUT = 0;
+	public static final int ILLEGAL_CODE_OUTPUT = 1;
 
 	/*
 	returns an array of all lines in file, as Strings
@@ -32,25 +33,24 @@ public class Sjavac {
 
 		if (args.length != 2){
 			System.err.println(ARGS_NUM_ERROR);
-			System.out.println(2);
+			System.out.println(IO_ERROR_OUTPUT);
 			return;
 		}
-		//TODO check args
 		String[] lines = null;
-//		try {
-//			lines = getLines(args[0]);
-//		} catch (IOException e) {
-//			System.err.println(IO_ERROR);
-//			return;
-//		}
-		lines = new String[]{"void tomer(int j,boolean kk){"}; //todo delete
+		try {
+			lines = getLines(args[0]);
+		} catch (IOException e) {
+			System.err.println(IO_ERROR);
+			System.out.println(IO_ERROR_OUTPUT);
+		}
 		MasterBlock master = MasterBlock.getInstance();
 		master.setLines(lines);
 		try {
-			master.getGlobalDataMembers();
+			master.run();
+			System.out.println(LEGAL_CODE_OUTPUT);
 		} catch (IllegalLineException e) {
 			System.err.println(e.getMessage());
-			return;
+			System.out.println(ILLEGAL_CODE_OUTPUT);
 		}
 
 	}

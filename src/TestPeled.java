@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 public class TestPeled {
 
 
-//	public static void main(String[] args) {
+	public static void main(String[] args) {
 //		String function = "void f(int j){";
 //
 //		MasterBlock m = MasterBlock.getInstance();
@@ -21,7 +21,7 @@ public class TestPeled {
 //		}
 //
 ////		System.out.println(m.isFuncCallLegal("tomer( kgg ,5 )"));
-//	}
+	}
 
 
 }

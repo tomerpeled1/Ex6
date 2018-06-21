@@ -29,7 +29,7 @@ public abstract class SubBlock extends CodeBlock {
 		String line = null;
 		String nextLine = master.getLines()[curLineNum];
 		//problem with while, and matcher, if i get the
-		while (checkEnd(line, nextLine)) {
+		while (!checkEnd(line, nextLine)) {
 			line = nextLine;
 			CodeBlock nextBlock = null;
 			if (line.startsWith("//")) {
@@ -43,7 +43,10 @@ public abstract class SubBlock extends CodeBlock {
 			} else if (isCallToFunction(line)) {
 				isFuncCallLegal(line);
 			} else if (!assignmentLineHandle(line,curLineNum) && checkIfValidBooleanExpression(line,curLineNum)) {
-				nextBlock = new BooleanExpressionBlock(this,curLineNum);
+				nextBlock = new BooleanExpressionBlock(this,curLineNum+1);
+			}
+			else {
+				throw new IllegalLineException(ERROR_START + curLineNum + " no such operation");
 			}
 			if (nextBlock != null) {
 				nextBlock.run();
@@ -80,7 +83,7 @@ public abstract class SubBlock extends CodeBlock {
 		if (ifMatcher.matches() || whileMatcher.matches()) {
 			expressionStart = line.indexOf('(');
 			expressionEnd = line.indexOf(')');
-			booleanExpression = line.substring(expressionStart, expressionEnd);
+			booleanExpression = line.substring(expressionStart+1, expressionEnd);
 			String[] splitExpression = booleanExpression.split(Regex.BOOLEAN_EXPRESSION_SPLIT);
 			for (String exp : splitExpression) {
 				Matcher doubleMatch = Regex.DOUBLE_PATTERN.matcher(exp);

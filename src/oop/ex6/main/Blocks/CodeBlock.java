@@ -32,7 +32,7 @@ public abstract class CodeBlock {
 	 */
 	private void setMaster() {
 		if (this instanceof MasterBlock) master = (MasterBlock) this;
-		else master = parent.master;
+		else this.master = parent.master;
 	}
 
 	/**
@@ -65,9 +65,11 @@ public abstract class CodeBlock {
 		}
 		String[] varComponents = line.split("=");
 		VariableWrapper var = getVariableIfExists(varComponents[0]);
+		if (var == null) {
+			throw new IllegalLineException("error in line" + lineNum);
+		}
 		if (var.isFinal()) {
-			throw new IllegalLineException("error in line " + lineNum+ ", final variables"
-					+ " must be assigned at declaration");
+			throw new IllegalLineException("error in line " + lineNum + ", can't assign new value to final variable");
 		}
 		if (legalAssignment(line, varComponents, false, var.getType(),lineNum)) {
 			var.setHasValue(true);
@@ -88,8 +90,8 @@ public abstract class CodeBlock {
 	                                VariableWrapper.Types type,int lineNum)
 			throws IllegalLineException {
 		if (var.indexOf('=') < 0 && isFinal) {
-			throw new IllegalLineException("error in line " + lineNum + ", final " +
-					"variables must be assigned at declaration");
+			throw new IllegalLineException("error in line " + lineNum + ", can't assign value to final " +
+					"variable");
 		}
 		if (var.indexOf('=') >= 0 && varComponents.length == 1) {
 			throw new IllegalLineException("error in line " + lineNum + ", no given value.");
@@ -197,7 +199,6 @@ public abstract class CodeBlock {
 		Matcher m = Regex.funcNamePattern.matcher(line);
 		if (m.find()) {
 			String name = line.substring(m.start(), m.end());
-			System.out.println(master);
 			for (FunctionDefBlock func : master.getFuncs()) { // check if the function being called name
 				// is a name of a known function.
 				if (name.equals(func.getFuncName())) {

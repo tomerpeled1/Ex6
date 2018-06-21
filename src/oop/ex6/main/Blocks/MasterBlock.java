@@ -55,7 +55,7 @@ public class MasterBlock extends CodeBlock {
 	 *
 	 * @throws IllegalLineException If
 	 */
-	public void getGlobalDataMembers()
+	public void getGlobalDataMembers() //TODO make private
 			throws IllegalLineException {
 		int openBraces = 0;
 		for (String line : lines) {
@@ -94,7 +94,7 @@ public class MasterBlock extends CodeBlock {
 			this.variables.addAll(declarationLineToVarObj(line,lineNum));
 		} else if (methodDec.lookingAt()) { // method declaration line
 			FunctionWrapper wrapper = lineToFuncObj(line,lineNum);
-			FunctionDefBlock functionDefBlock = new FunctionDefBlock(wrapper, this, lineNum);
+			FunctionDefBlock functionDefBlock = new FunctionDefBlock(wrapper, this, lineNum+1);
 			this.funcs.add(functionDefBlock);
 		} else if (getVariableIfExists(words[0]) != null) { //assign value to already initialized variable
 			assignmentLineHandle(line,lineNum);
@@ -158,7 +158,8 @@ public class MasterBlock extends CodeBlock {
 
 		String[] temp = s.split("\\s+");
 		for (int j = 0; j < temp.length; j++) {
-			temp[j] = temp[j].replaceAll("\\(", "");
+			temp[j] = temp[j].replaceAll("\\(|\\)", "");
+
 		}
 		switch (temp.length) {
 			case 2:

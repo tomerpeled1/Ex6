@@ -19,6 +19,9 @@ public class FunctionDefBlock extends SubBlock {
     }
 
     protected boolean checkEnd(String line, String nextLine) {
+        if (line == null){
+            return false;
+        }
         if (!Regex.RETURN_PATTERN.matcher(line).matches()) {
             return false;
         }

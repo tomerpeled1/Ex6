@@ -1,4 +1,4 @@
-00:10:22
+02:11:26
 
 school solution#User solution#result#Test name
 
@@ -460,12 +460,12 @@ java.lang.NullPointerException
 0		0		passed		\SchoolTests\test433.sjava		
 1		1		passed		\SchoolTests\test434.sjava		
 1		1		passed		\SchoolTests\test435.sjava		
-1		0		failed		\SchoolTests\test436.sjava		##################################
+1		1		passed		\SchoolTests\test436.sjava		
 0		0		passed		\SchoolTests\test437.sjava		
 0		0		passed		\SchoolTests\test438.sjava		
 1		1		passed		\SchoolTests\test439.sjava		
 1		1		passed		\SchoolTests\test440.sjava		
-1		0		failed		\SchoolTests\test441.sjava		##################################
+1		1		passed		\SchoolTests\test441.sjava		
 1		1		passed		\SchoolTests\test442.sjava		
 0		0		passed		\SchoolTests\test451.sjava		
 1		1		passed		\SchoolTests\test452.sjava		
@@ -500,5 +500,5 @@ java.lang.NullPointerException
 1		1		passed		\SchoolTests\test504.sjava		
 0		0		passed		\SchoolTests\test505.sjava		
 
-passed 453 out of 459 tests.
+passed 455 out of 459 tests.
 

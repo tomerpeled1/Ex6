@@ -105,8 +105,8 @@ public abstract class SubBlock extends CodeBlock {
 			booleanExpression = line.substring(expressionStart+1, expressionEnd);
 			String[] splitExpression = booleanExpression.split(Regex.BOOLEAN_EXPRESSION_SPLIT);
 			for (String exp : splitExpression) {
-
-				exp = exp.replaceAll("\\s", "");
+				exp = exp.trim();
+				//exp = exp.replaceAll("\\s", "");
 				Matcher doubleMatch = Regex.DOUBLE_PATTERN.matcher(exp);
 				if (!(exp.equals("true") || exp.equals("false") || doubleMatch.matches() ||
 						InitiliazedValidBoolean(exp))) {

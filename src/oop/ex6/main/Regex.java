@@ -6,7 +6,7 @@ public class Regex {
 
 	public static final String DOUBLE_CHECK = "((-?[\\d]+[.]*[\\d]*)|(-?[\\d]*[.]*[\\d]+))";
 	public static final Pattern DOUBLE_PATTERN = Pattern.compile(DOUBLE_CHECK);
-	public static final Pattern INT_PATTERN = Pattern.compile("[\\d]+");
+	public static final Pattern INT_PATTERN = Pattern.compile("-?[\\d]+");
 	public static final Pattern CHAR_PATTERN = Pattern.compile("'.'");
 	public static final Pattern STRING_PATTERN = Pattern.compile("\".*\"");
 	public static final Pattern BOOLEAN_PATTERN = Pattern.compile("(true|false|" + DOUBLE_CHECK +")");
@@ -16,9 +16,9 @@ public class Regex {
 	private static final String type = "(int|double|String|boolean|char)";
 	public static final String variableTypeCheck = "\\s*" + type + "\\s*";
 
-	private static final String methodName = "[a-zA-Z][a-zA-z0-9_]*";
+	private static final String methodName = "[a-zA-Z][a-zA-Z0-9_]*";
 
-	private static final String varName = "[a-zA-Z_][a-zA-z0-9_]*";
+	private static final String varName = "(([a-zA-Z][a-zA-Z0-9_]*)|[_][a-zA-Z0-9_]+)";
 	public static final String FINAL_DEC = "\\s*final";
 
 	private static final String equalSignCheck = "[\\s]*=[\\s]*";
@@ -48,8 +48,8 @@ public class Regex {
 
 
 
-	public static final Pattern IF_PATTERN = Pattern.compile("\\s*if\\s*\\(.+\\)\\s*\\{");
-	public static final Pattern WHILE_PATTERN = Pattern.compile("\\s*while\\s*\\(.+\\)\\s*\\{");
+	public static final Pattern IF_PATTERN = Pattern.compile("\\s*if\\s*\\(.+\\)\\s*\\{\\s*");
+	public static final Pattern WHILE_PATTERN = Pattern.compile("\\s*while\\s*\\(.+\\)\\s*\\{\\s*");
 
 	public static final Pattern typePattern = Pattern.compile(type);
 	public static final Pattern VarDec = Pattern.compile("(\\s*((final)?\\s+" + type + ")|" + type + ").*;\\s*");

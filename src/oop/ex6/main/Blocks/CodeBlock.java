@@ -77,6 +77,12 @@ public abstract class CodeBlock {
 		}
 		String[] varComponents = line.split("=");
 		VariableWrapper var = getVariableIfExists(varComponents[0]);
+//		if (master.getVariableIfExists(var.getName()) != null) {
+//			VariableWrapper newVar = new VariableWrapper(var.getType(), var.getHasValue(),
+//					var.getName(), var.isFinal());
+//			this.variables.add(newVar);
+//			var = newVar;
+//		}
 		if (var == null) {
 			throw new IllegalLineException(ERROR_START + lineNum);
 		}
@@ -112,10 +118,12 @@ public abstract class CodeBlock {
 			throw new IllegalLineException(ERROR_START + lineNum);
 		}
 		Matcher m = Regex.varNamePattern.matcher(varComponents[0]);
-		if (!m.matches() || checkIfBlockVariable(varComponents[0])) {
+		//if (!m.matches() || checkIfBlockVariable(varComponents[0])) {
+		if (!m.matches()) {
 			throw new IllegalLineException(ERROR_START + lineNum +
 					CANT_INITIALIZE_VARIABLE);
 		}
+
 		if (varComponents.length == 2) {
 			if (!checkIfValueMatchType(type, varComponents[1])) {
 				throw new IllegalLineException(ERROR_START + lineNum +
@@ -133,13 +141,13 @@ public abstract class CodeBlock {
 	 * @param line The declaration line for creating variables objects.
 	 * @return An ArrayList of VariableWrapper.
 	 */
-	protected ArrayList<VariableWrapper> declarationLineToVarObj(String line, int lineNum) throws IllegalLineException {
+	protected void declarationLineToVarObj(String line, int lineNum) throws IllegalLineException {
 		Matcher typeNameMatcher = Regex.typePattern.matcher(line);
 		String type = "";
 		if (typeNameMatcher.find()) {
 			type = line.substring(typeNameMatcher.start(), typeNameMatcher.end());
 		}
-		ArrayList<VariableWrapper> newVariables = new ArrayList<VariableWrapper>();
+		//ArrayList<VariableWrapper> newVariables = new ArrayList<VariableWrapper>();
 		line = line.replaceFirst(Regex.variableTypeCheck, "");
 		boolean isFinal = false;
 		Matcher finalM = Regex.FINAL_PATTERN.matcher(line);
@@ -149,15 +157,19 @@ public abstract class CodeBlock {
 		}
 		String[] split = line.split("(\\s*,(\\s*)|\\s*;\\s*)");
 		for (String var : split) {
-			var = var.replaceAll("\\s", "");
-			String[] varComponents = var.split("=");
+			String[] varComponents = var.split("\\s*=\\s*");
+			if (checkIfBlockVariable(varComponents[0])) {
+				throw new IllegalLineException(ERROR_START + lineNum + ", variable already exists.");
+			}
 			if (legalAssignment(var, varComponents, isFinal, VariableWrapper.stringToTypes(type), lineNum)) {
-				newVariables.add(new VariableWrapper(type, true, varComponents[0], isFinal));
+				//newVariables.add(new VariableWrapper(type, true, varComponents[0], isFinal));
+				this.variables.add(new VariableWrapper(type, true, varComponents[0], isFinal));
 			} else {
-				newVariables.add(new VariableWrapper(type, false, varComponents[0], false));
+				//newVariables.add(new VariableWrapper(type, false, varComponents[0], false));
+				this.variables.add(new VariableWrapper(type, false, varComponents[0], false));
 			}
 		}
-		return newVariables;//if it has no variables in it, it's ok.
+		//return newVariables;//if it has no variables in it, it's ok.
 	}
 
 	//variable checks.
@@ -177,13 +189,14 @@ public abstract class CodeBlock {
 	 * @param name The name of the variable to check.
 	 * @return True if it's initialized, false else.
 	 */
-	protected boolean InitiliazedIntOrDouble(String name) {
+	protected boolean InitiliazedValidBoolean(String name) {
 		VariableWrapper var = getVariableIfExists(name);
 		if (var == null) {//not even in the list.
 			return false;
 		}
 		return var.getHasValue() &&
-				(var.getType() == VariableWrapper.Types.INT || var.getType() == VariableWrapper.Types.DOUBLE);
+				(var.getType() == VariableWrapper.Types.INT || var.getType() == VariableWrapper.Types.DOUBLE
+				|| var.getType() == VariableWrapper.Types.BOOLEAN);
 	}
 
 	//end of variable checks.
@@ -266,6 +279,13 @@ public abstract class CodeBlock {
 		VariableWrapper var = getVariableIfExists(param);
 		if (var!= null && var.getHasValue()){
 			VariableWrapper.Types varType = var.getType();
+			if (wantedType == VariableWrapper.Types.BOOLEAN) {
+				return varType == VariableWrapper.Types.BOOLEAN || varType == VariableWrapper.Types.INT ||
+						varType == VariableWrapper.Types.DOUBLE;
+			}
+			if (wantedType == VariableWrapper.Types.DOUBLE) {
+				return varType == VariableWrapper.Types.DOUBLE || varType == VariableWrapper.Types.INT;
+			}
 			return wantedType == varType;
 		}
 		switch (wantedType) {

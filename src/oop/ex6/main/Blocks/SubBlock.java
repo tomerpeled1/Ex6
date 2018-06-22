@@ -23,6 +23,7 @@ public abstract class SubBlock extends CodeBlock {
 
 	@Override
 	public void run() throws IllegalLineException {
+		//TODO if end sometimes not good because we run on the line of brackets.
 
 		//TODO when runs, check if there is off by one here.
 		int curLineNum = startLineIndex;
@@ -41,20 +42,24 @@ public abstract class SubBlock extends CodeBlock {
 			Matcher varDec = Regex.VarDec.matcher(line);
 			Matcher returnMatcher = Regex.RETURN_PATTERN.matcher(line);
 			if (varDec.matches()) { // variable declaration line
-				this.variables.addAll(declarationLineToVarObj(line,curLineNum));
+				//this.variables.addAll(declarationLineToVarObj(line,curLineNum));
+				declarationLineToVarObj(line, curLineNum);
 			} else if (isCallToFunction(line)) {
 				if (!isFuncCallLegal(line)) {
 					throw new IllegalLineException(ERROR_START + curLineNum + ", illegal call to function.");
 				}
-			} else if (!assignmentLineHandle(line,curLineNum) && checkIfValidBooleanExpression(line,curLineNum)) {
+			} else if (checkIfValidBooleanExpression(line,curLineNum)) {
 				nextBlock = new BooleanExpressionBlock(this,curLineNum+1);
-			} else if (returnMatcher.matches()) {
+			}
+			else if (returnMatcher.matches()) {
 				curLineNum++;
 				nextLine = master.getLines()[curLineNum];
 				if (checkEnd(line, nextLine)) {
+					endLineIndex = curLineNum;
 					return;
 				}
 				continue;
+			} else if (assignmentLineHandle(line,curLineNum)) {//If it's true the function assigns the variable.
 			}
 			else {
 				throw new IllegalLineException(ERROR_START + curLineNum + " no such operation");
@@ -100,10 +105,11 @@ public abstract class SubBlock extends CodeBlock {
 			booleanExpression = line.substring(expressionStart+1, expressionEnd);
 			String[] splitExpression = booleanExpression.split(Regex.BOOLEAN_EXPRESSION_SPLIT);
 			for (String exp : splitExpression) {
+
 				exp = exp.replaceAll("\\s", "");
 				Matcher doubleMatch = Regex.DOUBLE_PATTERN.matcher(exp);
 				if (!(exp.equals("true") || exp.equals("false") || doubleMatch.matches() ||
-						InitiliazedIntOrDouble(exp))) {
+						InitiliazedValidBoolean(exp))) {
 					throw new IllegalLineException("error in line " + lineNum + ", boolean " +
 							"expression not supported.");
 				}

@@ -91,7 +91,8 @@ public class MasterBlock extends CodeBlock {
 		Matcher varDec = Regex.VarDec.matcher(line);
 		Matcher methodDec = Regex.funcLineStartPattern.matcher(line);
 		if (varDec.matches()) { // variable declaration line
-			this.variables.addAll(declarationLineToVarObj(line,lineNum));
+			//this.variables.addAll(declarationLineToVarObj(line,lineNum));
+            declarationLineToVarObj(line, lineNum);
 		} else if (methodDec.lookingAt()) { // method declaration line
 			FunctionWrapper wrapper = lineToFuncObj(line,lineNum);
 			FunctionDefBlock functionDefBlock = new FunctionDefBlock(wrapper, this, lineNum+1);

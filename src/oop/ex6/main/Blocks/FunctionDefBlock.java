@@ -25,7 +25,10 @@ public class FunctionDefBlock extends SubBlock {
         this.variables.addAll(wrapper.getParams());
         this.wrapper = wrapper;
         this.master = parent;
+//        this.globalVars =
     }
+
+
 
     /**
      * {@inheritDoc}

@@ -22,6 +22,16 @@ public abstract class SubBlock extends CodeBlock {
 	}
 
 	@Override
+	protected boolean isOnlyGlobalVar(VariableWrapper var) {
+		for (VariableWrapper localVar:variables){
+			if (localVar.getName().equals(var.getName()) && localVar.getType().equals(var.getType())){
+				return false;
+			}
+		}
+		return parent.isOnlyGlobalVar(var);
+	}
+
+	@Override
 	public void run() throws IllegalLineException {
 		//TODO if end sometimes not good because we run on the line of brackets.
 

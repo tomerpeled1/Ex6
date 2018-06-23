@@ -25,9 +25,10 @@ public abstract class CodeBlock {
 
 
 	protected ArrayList<VariableWrapper> variables;
-	private CodeBlock parent;
+	protected CodeBlock parent;
 	//	protected static LinesRunner runner; //TODO delete if possible
 	protected MasterBlock master;
+//	protected ArrayList<VariableWrapper> globalVars;
 
 
 	/**
@@ -77,12 +78,12 @@ public abstract class CodeBlock {
 		}
 		String[] varComponents = line.split("=");
 		VariableWrapper var = getVariableIfExists(varComponents[0]);
-//		if (master.getVariableIfExists(var.getName()) != null) {
-//			VariableWrapper newVar = new VariableWrapper(var.getType(), var.getHasValue(),
-//					var.getName(), var.isFinal());
-//			this.variables.add(newVar);
-//			var = newVar;
-//		}
+		if (isOnlyGlobalVar(var) && this instanceof SubBlock) {
+			VariableWrapper newVar = new VariableWrapper(var.getType(), var.getHasValue(),
+					var.getName(), var.isFinal());
+			this.variables.add(newVar);
+			var = newVar;
+		}
 		if (var == null) {
 			throw new IllegalLineException(ERROR_START + lineNum);
 		}
@@ -94,6 +95,9 @@ public abstract class CodeBlock {
 		}
 		return true;
 	}
+
+	protected abstract boolean isOnlyGlobalVar(VariableWrapper var);
+
 
 	/**
 	 * Checks if an assignment(or declaration) of variable is legal.
@@ -154,6 +158,10 @@ public abstract class CodeBlock {
 		if (finalM.lookingAt()) {
 			line = line.replaceFirst(Regex.FINAL_DEC, "");
 			isFinal = true;
+		}
+
+		if (line.endsWith(",;")){ //TODO maybe it is a bad solution, look again, it tries to fix int a,b,c,;
+			throw new IllegalLineException(ERROR_START + lineNum + ", bad variable declereation");
 		}
 		String[] split = line.split("(\\s*,(\\s*)|\\s*;\\s*)");
 		for (String var : split) {
@@ -315,6 +323,11 @@ public abstract class CodeBlock {
 	 * @return The variable object if it's in the list, otherwise null.
 	 */
 	protected VariableWrapper getVariableIfExists(String name) {
+//		for (VariableWrapper var:this.globalVars){
+//			if (var.getName().equals(name)) {
+//				return var;
+//			}
+//		}
 		for (VariableWrapper var : this.variables) {
 			if (var.getName().equals(name)) {
 				return var;

@@ -91,7 +91,7 @@ public class MasterBlock extends CodeBlock {
 		Matcher varDec = Regex.VarDec.matcher(line);
 		Matcher methodDec = Regex.funcLineStartPattern.matcher(line);
 		if (varDec.matches()) { // variable declaration line
-			//this.variables.addAll(declarationLineToVarObj(line,lineNum));
+//			this.variables.addAll(declarationLineToVarObj(line,lineNum));
             declarationLineToVarObj(line, lineNum);
 		} else if (methodDec.lookingAt()) { // method declaration line
 			FunctionWrapper wrapper = lineToFuncObj(line,lineNum);
@@ -118,7 +118,7 @@ public class MasterBlock extends CodeBlock {
 	/*
 	gets a line of a function deceleration, and returns a function wrapper object.
 	 */
-	private static FunctionWrapper lineToFuncObj(String line, int lineNum) throws IllegalLineException {
+	private FunctionWrapper lineToFuncObj(String line, int lineNum) throws IllegalLineException {
 		Matcher format = Regex.FUNCTION_TEMPLATE.matcher(line);
 		if (!format.matches()) {
 			throw new IllegalLineException(ERROR_START + lineNum + FUNC_DEC_ERROR);
@@ -140,11 +140,24 @@ public class MasterBlock extends CodeBlock {
 		name.find();
 		name.find(); //twice to skip "void".
 		String funcName = line.substring(name.start(), name.end());
+		if (funcAlreadyExists(funcName)){
+			throw new IllegalLineException("error in line " + lineNum+
+					", two functions can't have the same name"); //TODO change
+		}
 		if (funcName.equals("void")) {
 			throw new IllegalLineException("error in line " + lineNum+
 					", function can't be named void");
 		}
 		return new FunctionWrapper(params, funcName);
+	}
+
+	private boolean funcAlreadyExists(String funcName) {
+		for (FunctionDefBlock func:this.funcs){
+			if (func.getFuncName().equals(funcName)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 
@@ -157,6 +170,9 @@ public class MasterBlock extends CodeBlock {
 	 */
 	private static void initParam(ArrayList<VariableWrapper> params, String s,int lineNum) throws IllegalLineException {
 
+//		s = s.replaceAll("\\s+"," ");
+//		s = s.replaceFirst(" ","");
+		s = s.trim();
 		String[] temp = s.split("\\s+");
 		for (int j = 0; j < temp.length; j++) {
 			temp[j] = temp[j].replaceAll("\\(|\\)", "");
@@ -233,6 +249,11 @@ public class MasterBlock extends CodeBlock {
 //			}
 //		}
 //		return;
+	}
+
+	@Override
+	protected boolean isOnlyGlobalVar(VariableWrapper var) {
+		return true;
 	}
 
 //	private static String getVarName(String s) { TODO clean here at the end if needed.

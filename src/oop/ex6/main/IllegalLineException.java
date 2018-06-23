@@ -6,7 +6,7 @@ package oop.ex6.main;
 public class IllegalLineException extends Exception {
     /**
      * creates a new exception
-     * @param message the massage that will be printed. an informative erro massege.
+     * @param message the massage that will be printed. an informative error massege.
      */
     public IllegalLineException(String message) {
         super(message);

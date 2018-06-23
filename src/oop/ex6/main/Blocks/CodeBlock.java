@@ -66,7 +66,7 @@ public abstract class CodeBlock {
 
 	/**
 	 * Checks if there's a need to handle an assignment.
-	 *
+	 *@param lineNum the number of the line.
 	 * @param line The line of the assignment to check.
 	 * @return True if it was an assignment, false otherwise.
 	 * @throws IllegalLineException If the assignment line was wrong.
@@ -146,8 +146,9 @@ public abstract class CodeBlock {
 
 	/**
 	 * Gets a declaration line and updates the wrappers for the declared variables.
-	 *
+	 *@param lineNum the number of the line.
 	 * @param line The declaration line for creating variables objects.
+	 * @throws IllegalLineException .
 	 */
 	protected void declarationLineToVarObj(String line, int lineNum) throws IllegalLineException {
 		Matcher typeNameMatcher = Regex.typePattern.matcher(line);

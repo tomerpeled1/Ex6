@@ -1,85 +1,104 @@
 tomerpeled
-avichayr
+dviramar
 
 
 =============================
 =      File description     =
 =============================
-This excercise sorts and filters files from a given commands file and files folder.
-the classes are all in package filesprocessing.
+This excercise checks if sjava fils are able to compile.
+the classes are all in package main.
 under the main package:
-    BadFileFormatException.java -  an exception that is thrown when the file is in bad format.
-    CommandFilesReader.java -a parser for the commands file. reads the file, and is used to get all the section objects.
-    CommandsSection.java -  represents a section of order and filter.
-    DirectoryProcessor.java -  the main class that runs all the project and prints the proper files.
-    FilesHelper.java - helper functions.
+    FunctionWrapper.java -  his class represents a function (not a function decleration block!) - it holds
+        the parameters it should get(types and names),and the name of the function..
+    IllegalLineException.java -an exception that is thrown where an error in a line happens.
+    Regex.java -  this class holds all the Patterns the program is using.
+    Sjavac.java -  the main class. it gets a sjava file name and checks if the file will be able to compile.
+    VariableWrapper.java - this class represents a variable of the program checked.
 
 
-under package FileFiltering:
-    BadFilterFormatException -  An exception that is thrown when the filter name is written not properly.
-    FileFilter.java - an abstract class represents a text filter.
-    FileAccessFilter.java -  a filter based on access permisions.
-    FileFilterFactory.java - a factory that creates filters.
-    FileFilters.java - enum that holds the names of all possible filters.
-    FileNameFilterer - a filter based on the names of files..
-    FilterType.java -  enum, possible types of filters.
-    NoFileFilter.java - filter that returns all files.
-    Range.java - represents a range of numbers, used by the size filters.
-    SizeFileFilter.java -a filter based on size of the files.
-
-under package FileOrdering:
-    FileOrderer.java - an abstract class represents an order.
-    FileOrdererFactory.java -  a factory for FileOrderer objects.
-    AbsoluteNameFileOrderer.java - an order  that is based on the names of the files it orders.
-    BadOrderFormatException.java -  an exception that is thrown when the order name is written poorly.
-    FileSizeOrderer.java -  an orderer based on the size of files.
-    FileTypeOrderer.java -  an orderer based on the type of files.
-    OrderOptions.java -  holds all the possible order options.
-
+under package Blocks, which holds all the objects connected to scopes:
+    CodeBlock -  this abstract class represents a single block, scope of code - a global scope,
+        function or if/while scope.
+    BooleanExpressionBlock.java - this class represents a block of if/while statement.
+    FunctionDefBlock.java -  this class represents a scope of a function.
+    MasterBlock.java - this class represents the global scope of the sjava file.
+    SubBlock.java - this abstract class represents a block which is not the main block
+        - a function decleretion of if/while block.
 
 =============================
 =          Design           =
 =============================
-The design is explined here from top to bottom:
-We have DirectoryProccessor (refered as main) which has the main function. It uses all the other classes.
-the CommandFilesReader(the parser) parses through the commands file and creates commandSections.
-The CommandsSection has a Filter and a Orederer and it is created by the parser from instructions
-found in the from the commands file.
-the FileFilter package has one abstract filter class, and 4 types of filter extends it.each one has
-a filter() function that gets a list of files and returns only the files that passed the filter.
-the FileOrderer package  has one abstract class and 3 subclasses, and it uses comperators
-to sort the files in the wanted order.
-The Section has  a Filter object and an Order object so it can use both to print the files
-needed it the right order. the Section actually holds all the information needed to filter, sort and
-print file from a single request.
-The main gets a list of sections from the parser and prints the needed files according to it -
-for each section,the files it needs..
 
+we thought a long time for a proper design for this excersice. we firstly decided on a design, then wrote
+a skeleton for the flow of the program, and then implemented to details. At first, we saw that it is obvious
+we need to run on each scope with it's parameters, so we decided to make object of Blocks,
+then we thought that we handle differently global and local variables so we created a class of masterBlock and
+one of subBlock.
 
-Exceptions - if a critical error accurs we throw from the parser or from the main itself an
-Exception and catch it in the main. If a minor error accures, we throw an exception when we read the file
-and as the files are printed the exception is caught and an error massage is printed.
+The information about variables is kept in a seperated object. it holds it's type as an enum instance,
+so if we will want to add another type like float we can simply add it to the enum.
 
+As for functions - this was a little bit more tricky. we considered having a Function object, but ruled it:
+we understood that there are two different types of lines containing functions handling - decleration and
+usage. when declaring a function we create a FunctionWrapper object which holds the parameters types, names
+and function's name. then, we want to see if the decleration is valid, so we use a FunctionDefBlock
+which extends CodeBlock. this FunctionDefBlock "Has a" FunctionWrapper which holds the inforamtion on the
+relevant parameters legal specificly those it gets from the user. In addition, when we call a function
+later in the code, we need to check only the FunctionWrapper that holds detalis about the
+legalicy of the call. This is the main reason we chose to use the wrapper.
+
+The check for wxistane of variable and functions is done recursively - we hold a list of data members of each scope,
+and if we can't find a data member we look for it in the parent's list, until we get to the master.
+an alternative to this is to get in the constructor of a block the data members of it's parent's lists' and
+to keep all data in the scope itslef. We chose recursion because it is redundent to keep the
+data members several times,it wastes memory, and we think recursion can solve this problem.
+
+The patterns of regexes need to compile only once, so we made a class holds all the patterns
+as static data members.
+Another thing that was fun to realize, and we changed the design in the procecs, is that we don't need
+to keep the data a variable holds, but only if it has a value, which made a lot of thing easier.
 
 
 =============================
 =  Implementation details   =
 =============================
 
-Ordering files(filtering is quite similar): In order to order (joke unintended:)) we created an abstract
-class that represent an orderer - an object that orders files according to certain order rule. Then we have
-more custom classes that inherit from the abstract class. In order to create the right filter object from
-the order string, we first parse it using our parser class. Then we use a factory class to choose the right
-filter class from the parser. It does that by having a smart enum than contains not only the types of orders,
-but also for each type there is a function that creates the right type of class from it. This allows us to
-be more modular, and allow future changes very easily and without changing working code.
-
-The CommandFilesReader is used only to parse the text, and doesnt need to have instances. therefore, we
-chose to make it a class of only static methods.
 
 =============================
 =    Answers to questions   =
 =============================
-No Questions were asked during this exercise.
+1. Exceptions -
 
-Thank you:)
+the way we chose to handle errors in the sjava files is to throw an exception when seeing an error.
+the exception is thrown with a massege to print which contains the line number. we do so because
+this way we can be very specific about the errors, and because the exception mechanism lets us
+handle an error and simply throw an exception and cut the check. the exceptions are thrown upwards,
+and the main of Javac catches them and prints "1" and the message.
+
+2. Design -
+the design is explained to details in DESIGN section.
+
+handling more variable types - as explained before, if we want to add another type we simply add it to
+the enum defining the types.
+
+extra features -
+a. methods of java - our program initializes the list of functions as an empty list. if we will have built-in
+methods, we will hold a list of them as FunctionWrappers and every time we see a call to a function we will
+check in addition to the functions the program declares, in the list of built-ins.
+b. Inheritage of files - exactly like we check for existence of data members recursivly until
+we get to the main scope, we will keep searching for functions in the parent scope that we will keep as
+another data member of the master scope. We will do that until we get to a scope that does not inherit
+from any other file, aka has a parentScope equals to null.
+
+3. Regular Expressions -
+two main regexes we used:
+a. a regex that checks if a line is a proper decleration on function. it checks if a line starts with void,
+then a legal name of funtion, the brackents with types, names and commas, and then that the line
+ends with ";". We want to state that we are very proud of this regex, and that it is 3 lines long :).
+b. a regex that is used to split boolean expressions - a solution to existance of "&&" and "||", this
+regex is used in split() method and then we can check the expression as combination of some smaller ones.
+c. a regex that checks if a line is if of while line (two different regexes). very similar to (a),
+but shorter.
+
+
+

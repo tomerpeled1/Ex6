@@ -2,9 +2,12 @@ package oop.ex6.main;
 
 import java.util.regex.Pattern;
 
+/**
+ * this class holds all the Patterns the program is using.
+ */
 public class Regex {
 
-	public static final String DOUBLE_CHECK = "((-?[\\d]+[.]*[\\d]*)|(-?[\\d]*[.]*[\\d]+))";
+	private static final String DOUBLE_CHECK = "((-?[\\d]+[.]*[\\d]*)|(-?[\\d]*[.]*[\\d]+))";
 	public static final Pattern DOUBLE_PATTERN = Pattern.compile(DOUBLE_CHECK);
 	public static final Pattern INT_PATTERN = Pattern.compile("-?[\\d]+");
 	public static final Pattern CHAR_PATTERN = Pattern.compile("'.'");
@@ -58,12 +61,13 @@ public class Regex {
 	public static final Pattern funcLineStartPattern = Pattern.compile("\\s*void");
 	private static final String varLineCheck = "[\\s]*" + type + "[\\s]+.*[\\s]*;[\\s]*";
 	public static final Pattern varLinePattern = Pattern.compile(varLineCheck);
-	//TODO when checking a final var line pattern you need to check initialization too because it must be initiliazed.
 	public static final Pattern finalVarLinePattern = Pattern.compile("[\\s]*" + "final[\\s]+" + varLineCheck);
 	public static final Pattern FINAL_PATTERN = Pattern.compile(FINAL_DEC);
 	public static final Pattern EMPTY_LINE_PATTERN = Pattern.compile("\\s*");
 	public static final Pattern OPEN_BLOCK_PATTERN = Pattern.compile(".*\\{\\s*");
 	public static final Pattern CLOSE_BLOCK_PATTERN = Pattern.compile("\\s*}\\s*");
+	public static final Pattern END_WITH_COMMA = Pattern.compile(".*(\\s*,\\s*;\\s*)");
+
 
 	public static final Pattern funcNamePattern = Pattern.compile(methodName);
 

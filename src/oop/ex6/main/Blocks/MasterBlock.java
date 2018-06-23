@@ -8,32 +8,47 @@ import oop.ex6.main.VariableWrapper;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
+/**
+ * this class represents the global scope of the sjava file.
+ */
 public class MasterBlock extends CodeBlock {
 
 
+	public static final String FUNC_NAME_DUPLICATION = ", two functions can't have the same name";
+	public static final String FUNC_DEC = "void";
+	public static final String FUNCTION_CANT_BE_NAMED_VOID = ", function can't be named void";
+	private static final String VAR_DUPLICATION = ": cant assign two " +
+			"variables in the same name";
 	private ArrayList<FunctionDefBlock> funcs;
 
-	private static MasterBlock ourInstance = new MasterBlock();
 
-
+	/**
+	 * @return the lines of the sjava file
+	 */
 	String[] getLines() {
 		return lines;
 	}
 
 	private String[] lines;
 
-	public static MasterBlock getInstance() {
+
+	public static MasterBlock getInstance() { //TODO delete
 		return new MasterBlock();
 	}
 
-	private MasterBlock() {
+	/**
+	 * creates a new master block with empty functions and variables lists.
+	 */
+	public MasterBlock() {
 		super();
 		funcs = new ArrayList<FunctionDefBlock>();
 		variables = new ArrayList<VariableWrapper>();
-//		runner = null;
 
 	}
 
+	/**
+	 * @return functions of the program.
+	 */
 	public ArrayList<FunctionDefBlock> getFuncs() {
 		return funcs;
 	}
@@ -45,17 +60,15 @@ public class MasterBlock extends CodeBlock {
 	 */
 	public void setLines(String[] lines) {
 		this.lines = lines;
-//		runner = new LinesRunner(lines);
 	}
 
-	//TODO
 
 	/**
 	 * Initiliazes the the functions and global variables of the master block.
 	 *
 	 * @throws IllegalLineException If
 	 */
-	public void getGlobalDataMembers() //TODO make private
+	private void getGlobalDataMembers()
 			throws IllegalLineException {
 		int openBraces = 0;
 		for (String line : lines) {
@@ -71,13 +84,13 @@ public class MasterBlock extends CodeBlock {
 				openBraces -= 1;
 			}
 		}
-		if (openBraces!=0){
+		if (openBraces != 0) {
 			throw new IllegalLineException(OPEN_BLOCK_AT_END_ERROR);
 		}
 	}
 
 	/*
-	checks a line
+	checks a  single line
 	 */
 	private void checkGlobalLine(String line) throws IllegalLineException {
 
@@ -91,27 +104,18 @@ public class MasterBlock extends CodeBlock {
 		Matcher varDec = Regex.VarDec.matcher(line);
 		Matcher methodDec = Regex.funcLineStartPattern.matcher(line);
 		if (varDec.matches()) { // variable declaration line
-//			this.variables.addAll(declarationLineToVarObj(line,lineNum));
-            declarationLineToVarObj(line, lineNum);
+			declarationLineToVarObj(line, lineNum);
 		} else if (methodDec.lookingAt()) { // method declaration line
-			FunctionWrapper wrapper = lineToFuncObj(line,lineNum);
-			FunctionDefBlock functionDefBlock = new FunctionDefBlock(wrapper, this, lineNum+1);
+			FunctionWrapper wrapper = lineToFuncObj(line, lineNum);
+			FunctionDefBlock functionDefBlock = new FunctionDefBlock(wrapper, this, lineNum + 1);
 			this.funcs.add(functionDefBlock);
 		} else if (getVariableIfExists(words[0]) != null) { //assign value to already initialized variable
-			assignmentLineHandle(line,lineNum);
+			assignmentLineHandle(line, lineNum);
 		} else { //all other options were checked so the line is illegal
 			throw new IllegalLineException(ERROR_START + lineNum +
 					ILLEGAL_LINE_IN_MAIN_SCOPE);
 		}
 
-
-//		Matcher funcLineStart = Regex.funcLineStartPattern.matcher(line);
-//		Matcher varLineStart = Regex.varLinePattern.matcher(line);
-//		if (funcLineStart.matches()) {
-//			this.funcs.add(lineToFuncObj(line));
-//		} else if (varLineStart.matches()) {
-//			this.variables.addAll(lineToVarObj(line));
-//		}
 
 	}
 
@@ -125,7 +129,6 @@ public class MasterBlock extends CodeBlock {
 		}
 		Matcher typesMatcher = Regex.typePattern.matcher(line);
 		ArrayList<VariableWrapper> params = new ArrayList<VariableWrapper>();
-		Matcher paramName = Regex.varNamePattern.matcher(line); //TODO maybe can delete this
 		String brackets = getBracketsString(line);
 		if (brackets.matches(".*\\s*,\\s*\\)\\s*")) {
 			throw new IllegalLineException(ERROR_START + lineNum + FUNC_DEC_ERROR);
@@ -133,27 +136,27 @@ public class MasterBlock extends CodeBlock {
 		String[] typesAndVals = brackets.split(",");
 		int i = 0;
 		while (typesMatcher.find()) {
-			initParam(params, typesAndVals[i],lineNum);
+			initParam(params, typesAndVals[i], lineNum);
 			i++;
 		}
 		Matcher name = Regex.funcNamePattern.matcher(line);
 		name.find();
 		name.find(); //twice to skip "void".
 		String funcName = line.substring(name.start(), name.end());
-		if (funcAlreadyExists(funcName)){
-			throw new IllegalLineException("error in line " + lineNum+
-					", two functions can't have the same name"); //TODO change
+		if (funcAlreadyExists(funcName)) {
+			throw new IllegalLineException(ERROR_START + lineNum +
+					FUNC_NAME_DUPLICATION);
 		}
-		if (funcName.equals("void")) {
-			throw new IllegalLineException("error in line " + lineNum+
-					", function can't be named void");
+		if (funcName.equals(FUNC_DEC)) {
+			throw new IllegalLineException(ERROR_START + lineNum +
+					FUNCTION_CANT_BE_NAMED_VOID);
 		}
 		return new FunctionWrapper(params, funcName);
 	}
 
 	private boolean funcAlreadyExists(String funcName) {
-		for (FunctionDefBlock func:this.funcs){
-			if (func.getFuncName().equals(funcName)){
+		for (FunctionDefBlock func : this.funcs) {
+			if (func.getFuncName().equals(funcName)) {
 				return true;
 			}
 		}
@@ -168,10 +171,7 @@ public class MasterBlock extends CodeBlock {
 	 * @param s      the string from which we want to create the Variable. will be in a format of a
 	 *               variable deceleration.
 	 */
-	private static void initParam(ArrayList<VariableWrapper> params, String s,int lineNum) throws IllegalLineException {
-
-//		s = s.replaceAll("\\s+"," ");
-//		s = s.replaceFirst(" ","");
+	private void initParam(ArrayList<VariableWrapper> params, String s, int lineNum) throws IllegalLineException {
 		s = s.trim();
 		String[] temp = s.split("\\s+");
 		for (int j = 0; j < temp.length; j++) {
@@ -192,30 +192,23 @@ public class MasterBlock extends CodeBlock {
 				type = temp[1];
 				break;
 		}
-		if (checkIfNameTaken(name,params)) {
-			throw new IllegalLineException(ERROR_START + lineNum + ": cant assign two " +
-					"variables in the same name");
+		if (checkIfNameTaken(name, params)) {
+			throw new IllegalLineException(ERROR_START + lineNum + VAR_DUPLICATION);
 		}
 		params.add(new VariableWrapper(type, true, name, isFinal));
-
-
-
-//		String[] curValAndType = s.split("\\s+");
-//		String curParamName;
-//		if (curValAndType[0].equals("(")) {
-//			curParamName = getVarName(curValAndType[2]);
-//		} else {
-//			curParamName = getVarName(curValAndType[1]);
-//		}
-//		int start = typesMatcher.start(), end = typesMatcher.end();
-//		params.add(new VariableWrapper(line.substring(start, end), true, curParamName));
-//		i++;
-//		return i;
 	}
 
-	private static boolean checkIfNameTaken(String name, ArrayList<VariableWrapper> params) {
-		for (VariableWrapper p:params) {
+	/*
+	check if the name of a variable already defines another variable.l
+	 */
+	private boolean checkIfNameTaken(String name, ArrayList<VariableWrapper> params) {
+		for (VariableWrapper p : params) {
 			if (p.getName().equals(name)) {
+				return true;
+			}
+		}
+		for (FunctionDefBlock func :funcs ) {
+			if (func.getFuncName().equals(name)) {
 				return true;
 			}
 		}
@@ -224,46 +217,15 @@ public class MasterBlock extends CodeBlock {
 
 	@Override
 	public void run() throws IllegalLineException {
-			getGlobalDataMembers();
-			for (FunctionDefBlock funcDef : funcs) {
-				funcDef.run();
-			}
-
-//		String line = runner.getNextLine();
-//		while (line != null) {
-//			Matcher emptyLine = Regex.EMPTY_LINE_PATTERN.matcher(line);
-//			if (emptyLine.matches()) continue; //empty line
-//			if (line.startsWith("//")) { // comment
-//				line = runner.getNextLine();
-//				continue;
-//			}
-//			line = line.replaceFirst("\\s*", "");
-//			String[] words = line.split("\\s+");
-//			Matcher startWithType = Regex.typePattern.matcher(line);
-//			if (startWithType.lookingAt()) { //decleration line, already did this
-//				continue;
-//			} else if (getVariableIfExists(words[0]) != null) {
-//
-//			} else if (words[0].equals("void")) {
-//
-//			}
-//		}
-//		return;
+		getGlobalDataMembers();
+		for (FunctionDefBlock funcDef : funcs) {
+			funcDef.run();
+		}
 	}
 
 	@Override
 	protected boolean isOnlyGlobalVar(VariableWrapper var) {
 		return true;
 	}
-
-//	private static String getVarName(String s) { TODO clean here at the end if needed.
-//		String curParamName;
-//		if (s.endsWith(")")) {
-//			curParamName = s.substring(0, s.length() - 1);
-//		} else {
-//			curParamName = s;
-//		}
-//		return curParamName;
-//	}
 }
 

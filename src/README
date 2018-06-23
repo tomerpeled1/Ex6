@@ -1,0 +1,85 @@
+tomerpeled
+avichayr
+
+
+=============================
+=      File description     =
+=============================
+This excercise sorts and filters files from a given commands file and files folder.
+the classes are all in package filesprocessing.
+under the main package:
+    BadFileFormatException.java -  an exception that is thrown when the file is in bad format.
+    CommandFilesReader.java -a parser for the commands file. reads the file, and is used to get all the section objects.
+    CommandsSection.java -  represents a section of order and filter.
+    DirectoryProcessor.java -  the main class that runs all the project and prints the proper files.
+    FilesHelper.java - helper functions.
+
+
+under package FileFiltering:
+    BadFilterFormatException -  An exception that is thrown when the filter name is written not properly.
+    FileFilter.java - an abstract class represents a text filter.
+    FileAccessFilter.java -  a filter based on access permisions.
+    FileFilterFactory.java - a factory that creates filters.
+    FileFilters.java - enum that holds the names of all possible filters.
+    FileNameFilterer - a filter based on the names of files..
+    FilterType.java -  enum, possible types of filters.
+    NoFileFilter.java - filter that returns all files.
+    Range.java - represents a range of numbers, used by the size filters.
+    SizeFileFilter.java -a filter based on size of the files.
+
+under package FileOrdering:
+    FileOrderer.java - an abstract class represents an order.
+    FileOrdererFactory.java -  a factory for FileOrderer objects.
+    AbsoluteNameFileOrderer.java - an order  that is based on the names of the files it orders.
+    BadOrderFormatException.java -  an exception that is thrown when the order name is written poorly.
+    FileSizeOrderer.java -  an orderer based on the size of files.
+    FileTypeOrderer.java -  an orderer based on the type of files.
+    OrderOptions.java -  holds all the possible order options.
+
+
+=============================
+=          Design           =
+=============================
+The design is explined here from top to bottom:
+We have DirectoryProccessor (refered as main) which has the main function. It uses all the other classes.
+the CommandFilesReader(the parser) parses through the commands file and creates commandSections.
+The CommandsSection has a Filter and a Orederer and it is created by the parser from instructions
+found in the from the commands file.
+the FileFilter package has one abstract filter class, and 4 types of filter extends it.each one has
+a filter() function that gets a list of files and returns only the files that passed the filter.
+the FileOrderer package  has one abstract class and 3 subclasses, and it uses comperators
+to sort the files in the wanted order.
+The Section has  a Filter object and an Order object so it can use both to print the files
+needed it the right order. the Section actually holds all the information needed to filter, sort and
+print file from a single request.
+The main gets a list of sections from the parser and prints the needed files according to it -
+for each section,the files it needs..
+
+
+Exceptions - if a critical error accurs we throw from the parser or from the main itself an
+Exception and catch it in the main. If a minor error accures, we throw an exception when we read the file
+and as the files are printed the exception is caught and an error massage is printed.
+
+
+
+=============================
+=  Implementation details   =
+=============================
+
+Ordering files(filtering is quite similar): In order to order (joke unintended:)) we created an abstract
+class that represent an orderer - an object that orders files according to certain order rule. Then we have
+more custom classes that inherit from the abstract class. In order to create the right filter object from
+the order string, we first parse it using our parser class. Then we use a factory class to choose the right
+filter class from the parser. It does that by having a smart enum than contains not only the types of orders,
+but also for each type there is a function that creates the right type of class from it. This allows us to
+be more modular, and allow future changes very easily and without changing working code.
+
+The CommandFilesReader is used only to parse the text, and doesnt need to have instances. therefore, we
+chose to make it a class of only static methods.
+
+=============================
+=    Answers to questions   =
+=============================
+No Questions were asked during this exercise.
+
+Thank you:)

@@ -1,6 +1,5 @@
 package oop.ex6.main.Blocks;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import oop.ex6.main.IllegalLineException;
 import oop.ex6.main.Regex;
 import oop.ex6.main.VariableWrapper;
@@ -13,12 +12,20 @@ import java.util.regex.Pattern;
  */
 public abstract class SubBlock extends CodeBlock {
 
+	private static final String ILLEGAL_CALL_TO_FUNCTION = ", illegal call to function.";
+	private static final String INVALID_BOOL_EXPRESSION = ", boolean " +
+			"expression not supported.";
 	private int startLineIndex;
 	private int endLineIndex;
 
-	public SubBlock(CodeBlock parent, int start) {
+	/**
+	 * initializes a code block with a parent and a startline.
+	 * @param parent the block contains directly this block.
+	 * @param startLine the line in the code where the block starts.
+	 */
+	public SubBlock(CodeBlock parent, int startLine) {
 		super(parent);
-		startLineIndex = start;
+		startLineIndex = startLine;
 	}
 
 	@Override
@@ -33,14 +40,9 @@ public abstract class SubBlock extends CodeBlock {
 
 	@Override
 	public void run() throws IllegalLineException {
-		//TODO if end sometimes not good because we run on the line of brackets.
-
-		//TODO when runs, check if there is off by one here.
 		int curLineNum = startLineIndex;
-
 		String line = null;
 		String nextLine = master.getLines()[curLineNum];
-		//problem with while, and matcher, if i get the
 		while (!checkEnd(line, nextLine)) {
 			line = nextLine;
 			SubBlock nextBlock = null;
@@ -52,11 +54,10 @@ public abstract class SubBlock extends CodeBlock {
 			Matcher varDec = Regex.VarDec.matcher(line);
 			Matcher returnMatcher = Regex.RETURN_PATTERN.matcher(line);
 			if (varDec.matches()) { // variable declaration line
-				//this.variables.addAll(declarationLineToVarObj(line,curLineNum));
 				declarationLineToVarObj(line, curLineNum);
 			} else if (isCallToFunction(line)) {
 				if (!isFuncCallLegal(line)) {
-					throw new IllegalLineException(ERROR_START + curLineNum + ", illegal call to function.");
+					throw new IllegalLineException(ERROR_START + curLineNum + ILLEGAL_CALL_TO_FUNCTION);
 				}
 			} else if (checkIfValidBooleanExpression(line,curLineNum)) {
 				nextBlock = new BooleanExpressionBlock(this,curLineNum+1);
@@ -69,7 +70,8 @@ public abstract class SubBlock extends CodeBlock {
 					return;
 				}
 				continue;
-			} else if (assignmentLineHandle(line,curLineNum)) {//If it's true the function assigns the variable.
+			} else if (assignmentLineHandle(line,curLineNum)) {
+				//If it's true the function assigns the variable.
 			}
 			else {
 				throw new IllegalLineException(ERROR_START + curLineNum + " no such operation");
@@ -86,6 +88,9 @@ public abstract class SubBlock extends CodeBlock {
 	}
 
 
+	/*
+	checks if a line is a call to function.
+	 */
 	private boolean isCallToFunction(String line) {
 		for (FunctionDefBlock func : master.getFuncs()) {
 			String regex = "\\s*" + func.getFuncName() + "\\s*(.*)\\s*;\\s*";
@@ -120,8 +125,7 @@ public abstract class SubBlock extends CodeBlock {
 				Matcher doubleMatch = Regex.DOUBLE_PATTERN.matcher(exp);
 				if (!(exp.equals("true") || exp.equals("false") || doubleMatch.matches() ||
 						InitiliazedValidBoolean(exp))) {
-					throw new IllegalLineException("error in line " + lineNum + ", boolean " +
-							"expression not supported.");
+					throw new IllegalLineException(ERROR_START + lineNum + INVALID_BOOL_EXPRESSION);
 				}
 			}
 			return true;

@@ -12,23 +12,23 @@ import java.util.regex.Matcher;
  * this class represents a single block, scope of code - a global scope, function or if/while scope.
  */
 public abstract class CodeBlock {
+	//TODO magic numbers
 
 	protected static final String OPEN_BLOCK_AT_END_ERROR = "Error - need to close all curly braces.";
 	protected static final String ERROR_START = "Error in line ";
-	private static final String VAR_ERROR = " variable deceleration is done poorly.";
 	protected static final String FUNC_DEC_ERROR = " function deceleration is done poorly.";
 	protected static final String ILLEGAL_LINE_IN_MAIN_SCOPE = ", illegal line in main scope";
 	private static final String FINAL_VARIABLE_ERROR = ", can't assign new value to final variable";
 	private static final String NO_GIVEN_VALUE_ERROR = ", no given value.";
 	private static final String CANT_INITIALIZE_VARIABLE = ", can't initialize variable.";
 	private static final String VALUE_TYPE_ERROR = ", value doesn't match type.";
+	private static final String BAD_VARIABLE_DECLEREATION = ", bad variable declereation";
+	private static final String VARIABLE_ALREADY_EXISTS = ", variable already exists.";
 
 
 	protected ArrayList<VariableWrapper> variables;
 	protected CodeBlock parent;
-	//	protected static LinesRunner runner; //TODO delete if possible
 	protected MasterBlock master;
-//	protected ArrayList<VariableWrapper> globalVars;
 
 
 	/**
@@ -96,6 +96,11 @@ public abstract class CodeBlock {
 		return true;
 	}
 
+	/**
+	 * @param var a variable to check
+	 * @return true iff the variable is only a global variable, and is not also a local
+	 * variable of some block this block is a son of.
+	 */
 	protected abstract boolean isOnlyGlobalVar(VariableWrapper var);
 
 
@@ -140,10 +145,9 @@ public abstract class CodeBlock {
 
 
 	/**
-	 * Gets a declaration line and returns the wrappers for the declared variables.
+	 * Gets a declaration line and updates the wrappers for the declared variables.
 	 *
 	 * @param line The declaration line for creating variables objects.
-	 * @return An ArrayList of VariableWrapper.
 	 */
 	protected void declarationLineToVarObj(String line, int lineNum) throws IllegalLineException {
 		Matcher typeNameMatcher = Regex.typePattern.matcher(line);
@@ -159,15 +163,15 @@ public abstract class CodeBlock {
 			line = line.replaceFirst(Regex.FINAL_DEC, "");
 			isFinal = true;
 		}
-
-		if (line.endsWith(",;")){ //TODO maybe it is a bad solution, look again, it tries to fix int a,b,c,;
-			throw new IllegalLineException(ERROR_START + lineNum + ", bad variable declereation");
+		Matcher badEnd = Regex.END_WITH_COMMA.matcher(line);
+		if (badEnd.matches()){ //TODO maybe it is a bad solution, look again, it tries to fix int a,b,c,;
+			throw new IllegalLineException(ERROR_START + lineNum + BAD_VARIABLE_DECLEREATION);
 		}
 		String[] split = line.split("(\\s*,(\\s*)|\\s*;\\s*)");
 		for (String var : split) {
 			String[] varComponents = var.split("\\s*=\\s*");
 			if (checkIfBlockVariable(varComponents[0])) {
-				throw new IllegalLineException(ERROR_START + lineNum + ", variable already exists.");
+				throw new IllegalLineException(ERROR_START + lineNum + VARIABLE_ALREADY_EXISTS);
 			}
 			if (legalAssignment(var, varComponents, isFinal, VariableWrapper.stringToTypes(type), lineNum)) {
 				//newVariables.add(new VariableWrapper(type, true, varComponents[0], isFinal));
@@ -177,7 +181,6 @@ public abstract class CodeBlock {
 				this.variables.add(new VariableWrapper(type, false, varComponents[0], false));
 			}
 		}
-		//return newVariables;//if it has no variables in it, it's ok.
 	}
 
 	//variable checks.
@@ -323,11 +326,6 @@ public abstract class CodeBlock {
 	 * @return The variable object if it's in the list, otherwise null.
 	 */
 	protected VariableWrapper getVariableIfExists(String name) {
-//		for (VariableWrapper var:this.globalVars){
-//			if (var.getName().equals(name)) {
-//				return var;
-//			}
-//		}
 		for (VariableWrapper var : this.variables) {
 			if (var.getName().equals(name)) {
 				return var;

@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class FunctionDefBlock extends SubBlock {
 
-    private FunctionWrapper wrapper;
+    private FunctionWrapper wrapper; // the FunctionWrapper this block has, holds it's name and parameters.
 
     /**
      * initializes a new functionBlock object.
@@ -25,7 +25,6 @@ public class FunctionDefBlock extends SubBlock {
         this.variables.addAll(wrapper.getParams());
         this.wrapper = wrapper;
         this.master = parent;
-//        this.globalVars =
     }
 
 

@@ -8,18 +8,13 @@ import oop.ex6.main.Regex;
 public class BooleanExpressionBlock extends SubBlock {
 
     /**
-     *
-     * @param parent
-     * @param start
+     {@inheritDoc}
      */
-    public BooleanExpressionBlock(CodeBlock parent, int start) {
+    BooleanExpressionBlock(CodeBlock parent, int start) {
         super(parent,start);
     }
 
     protected boolean checkEnd(String line, String nextLine) {
-//        if (line == null) {
-//            return Regex.BLOCK_END_PATTERN.matcher(nextLine).matches();
-//        }
         return Regex.BLOCK_END_PATTERN.matcher(nextLine).matches();
     }
 }

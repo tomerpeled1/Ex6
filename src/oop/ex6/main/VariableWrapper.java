@@ -1,5 +1,8 @@
 package oop.ex6.main;
 
+/**
+ * this class represents a variable of the program checked.
+ */
 public class VariableWrapper {
 	public enum Types {
 		INT, STRING,DOUBLE, BOOLEAN, CHAR
@@ -51,6 +54,10 @@ public class VariableWrapper {
 		this.hasValue = hasValue;
 	}
 
+	/**
+	 * @param str a type of variable as a string
+	 * @return  type of variable as a Types instance.
+	 */
 	public static Types stringToTypes(String str) {
 		switch (str) {
 			case "int":
